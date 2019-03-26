@@ -15,7 +15,7 @@
             src="https://img.4008123123.com/resource/VersionP/phdi/288_224482.jpg"
             alt="" width="100" height="100">
           <div class="footer">
-            <div>{{good.GoodsName}}商品</div>
+            <div>{{good.GoodsName}}</div>
             <div class="price">￥{{good.Price}}</div>
           </div>
 
