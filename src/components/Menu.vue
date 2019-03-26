@@ -38,10 +38,20 @@ export default {
     }
   },
   mounted () {
-    this.getTypes()
-    this.selectType(this.GoodsTypes[0], 0)
+    // this.getTypes()
+    // this.selectType(this.GoodsTypes[0], 0)
+    this.loadFoods()
   },
   methods: {
+    loadFoods () {
+      let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
+      Util.ajax.get(apiURL).then(res => {
+        console.log(res)
+        this.GoodsTypes = res.data.d
+        this.getTypes()
+        this.selectType(this.GoodsTypes[0], 0)
+      })
+    },
     selectType (type, index) {
       this.currentIndex = index
       this.goods = this.foods.filter(f => f.GoodsTypeName === type)
