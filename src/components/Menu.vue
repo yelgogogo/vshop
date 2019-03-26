@@ -33,7 +33,7 @@ export default {
       types: [1, 2, 3, 4, 5],
       currentIndex: 0,
       goods: [],
-      foods: [{'ID': 363, 'GoodsTypeName': '杞ギ', 'DisplayOrder': 12, 'GoodsName': '鑻忔墦姘�', 'GoodsCode': '101101', 'Price': 0.01, 'Unit': '鏀�', 'GoodsCount': 0, 'IsPack': false, 'GoodsRemarks': [], 'GoodsDetails': null}, {'ID': 364, 'GoodsTypeName': '杞ギ', 'DisplayOrder': 12, 'GoodsName': '骞插姘�', 'GoodsCode': '101102', 'Price': 0.01, 'Unit': '鏀�', 'GoodsCount': 0, 'IsPack': false, 'GoodsRemarks': [], 'GoodsDetails': null}, {'ID': 378, 'GoodsTypeName': '鏋滅洏', 'DisplayOrder': 13, 'GoodsName': '澶ф灉鐩�', 'GoodsCode': '101201', 'Price': 0.01, 'Unit': '浠�', 'GoodsCount': 0, 'IsPack': false, 'GoodsRemarks': [], 'GoodsDetails': null}, {'ID': 379, 'GoodsTypeName': '鏋滅洏', 'DisplayOrder': 13, 'GoodsName': '涓灉鐩�', 'GoodsCode': '101202', 'Price': 0.01, 'Unit': '浠�', 'GoodsCount': 0, 'IsPack': false, 'GoodsRemarks': [], 'GoodsDetails': null}],
+      foods: [],
       GoodsTypes: []
     }
   },
@@ -46,8 +46,8 @@ export default {
     loadFoods () {
       let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
       Util.ajax.get(apiURL).then(res => {
-        console.log(res)
-        this.GoodsTypes = res.data.d
+		console.log(res)
+        this.foods = res.data
         this.getTypes()
         this.selectType(this.GoodsTypes[0], 0)
       })
@@ -55,7 +55,7 @@ export default {
     selectType (type, index) {
       this.currentIndex = index
       this.goods = this.foods.filter(f => f.GoodsTypeName === type)
-      console.log(type)
+		console.log(type)
     },
     getTypes () {
       let arr = this.foods.map(f => f.GoodsTypeName)
