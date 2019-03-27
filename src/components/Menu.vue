@@ -17,14 +17,16 @@
 }
 .leftBox {
   width: 200px;
-  height: 100%;
+  height: 80vh;
+  overflow: scroll;
   display: flex;
   flex-direction: column;
   background-color: rgb(26, 25, 24);
 }
 .rightBox {
   flex: 1;
-  height: 100%;
+  height: 80vh;
+  overflow: scroll;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -111,7 +113,7 @@ export default {
   },
   methods: {
     imgs (id) {
-      return 'http://120.25.86.111:89/imggoods/' + id + '.jpg'
+      return 'http://120.25.86.111:89/imggoods/' + 363 + '.jpg'
     },
     loadFoods () {
       let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
