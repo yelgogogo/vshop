@@ -78,7 +78,7 @@
         <div v-for="good in goods"
              :key="good.ID"
              class="goodCard">
-          <img src={{apiURL+good.ID+'.jpg'}}
+          <img :src="imgs(good.ID)"
                alt
                width="100"
                height="100" />
@@ -110,6 +110,9 @@ export default {
     this.loadFoods()
   },
   methods: {
+    imgs (id) {
+      return 'http://120.25.86.111:89/imggoods/' + id + '.jpg'
+    },
     loadFoods () {
       let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
       Util.ajax.get(apiURL).then(res => {
