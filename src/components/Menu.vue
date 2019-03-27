@@ -46,6 +46,7 @@
 }
 .goodCard {
   width: 24vw;
+  height: 200px;
   margin: 2px;
   background: white;
 }
