@@ -60,6 +60,7 @@
   width: 60px;
 }
 </style>
+<<<<<<< .mine
 
 <template>
   <div class="mainBox">
@@ -129,3 +130,80 @@ export default {
   }
 }
 </script>
+
+
+
+=======
+
+<template>
+  <div class="mainBox">
+    <div class="topBox">top</div>
+    <div class="centerBox">
+      <div class="leftBox">
+        <div v-for="(type, index) in GoodsTypes"
+             :key="type"
+             class="leftBoxItem"
+             :class="{ current: currentIndex === index }"
+             @click="selectType(type, index)">
+          {{ type }}
+        </div>
+      </div>
+      <div class="rightBox">
+        <div v-for="good in goods"
+             :key="good.ID"
+             class="goodCard">
+          <img :src="imgs(good.ID)"
+               alt
+               width="100"
+               height="100" />
+          <div class="footer">
+            <div>{{ good.GoodsName }}</div>
+            <div class="price">￥{{ good.Price }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bottomBox">bottom</div>
+  </div>
+</template>
+rainforce1982@sina.com
+<script>
+import Util from '../libs/utils.js'
+export default {
+  name: 'Menu',
+  data () {
+    return {
+      types: [1, 2, 3, 4, 5],
+      currentIndex: 0,
+      goods: [],
+      foods: [],
+      GoodsTypes: []
+    }
+  },
+  mounted () {
+    this.loadFoods()
+  },
+  methods: {
+    imgs (id) {
+      return 'http://120.25.86.111:89/imggoods/' + id + '.jpg'
+    },
+    loadFoods () {
+      let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
+      Util.ajax.get(apiURL).then(res => {
+        this.foods = res.data
+        this.getTypes()
+        this.selectType(this.GoodsTypes[0], 0)
+      })
+    },
+    selectType (type, index) {
+      this.currentIndex = index
+      this.goods = this.foods.filter(f => f.GoodsTypeName === type)
+    },
+    getTypes () {
+      let arr = this.foods.map(f => f.GoodsTypeName)
+      this.GoodsTypes = Array.from(new Set(arr))
+    }
+  }
+}
+</script>
+>>>>>>> .theirs
