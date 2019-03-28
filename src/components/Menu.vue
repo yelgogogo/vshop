@@ -43,6 +43,7 @@
   flex: 1;
   overflow: scroll;
   display: flex;
+  align-content: flex-start;
   flex-direction: row;
   flex-wrap: wrap;
   background: black;
@@ -64,6 +65,7 @@
   width: 25vw;
   height: 38vh;
   margin: 2px;
+  margin-bottom: 6px;
   background: rgb(102, 96, 98);
 }
 .footer {
