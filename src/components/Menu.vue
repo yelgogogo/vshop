@@ -73,6 +73,7 @@
   height: 20%;
   color: whitesmoke;
   font-family: "楷体";
+  background: rgb(102, 96, 98);
 }
 .price {
   background: green;
