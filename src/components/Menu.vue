@@ -19,7 +19,7 @@
   font-family: "楷体";
 }
 .topRightBox {
-  width: 75vw;
+  flex:1;
   background: rgb(102, 96, 98);
   color: antiquewhite;
   justify-content: space-around;
