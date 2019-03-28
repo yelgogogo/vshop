@@ -1,4 +1,4 @@
-
+﻿
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .mainBox {
@@ -19,8 +19,8 @@
   font-family: "楷体";
 }
 .topRightBox {
-  flex:1;
-  background: rgb(102, 96, 98);
+  flex: 1;
+  background: rgb(41, 39, 42);
   color: antiquewhite;
   justify-content: space-around;
   font-family: "黑体";
@@ -68,11 +68,22 @@
   margin-bottom: 6px;
   background: rgb(102, 96, 98);
 }
+.goodimgdiv {
+  width: 25vw;
+  height: 80%;
+}
+.goodimg {
+  max-width: 320px;
+  width: expression(this.width>320? "100%": this.width);
+  max-height: 240px;
+  height: expression(this.height>240? "100%": this.height);
+}
 .footer {
   display: flex;
   justify-content: space-between;
   padding-left: 20px;
   height: 20%;
+  line-height: 50px;
   color: whitesmoke;
   font-family: "楷体";
   background: rgb(102, 96, 98);
@@ -106,11 +117,12 @@
         <div v-for="good in goods"
              :key="good.ID"
              class="goodCard">
-          <img :src="imgs(good.ID)"
-               :onerror="emptyGoodImg"
-               alt
-               width="100%"
-               height="80%" />
+          <div class="goodimgdiv">
+            <img :src="imgs(good.ID)"
+                 class="goodimg"
+                 :onerror="emptyGoodImg"
+                 alt />
+          </div>
           <div class="footer">
             <div>{{ good.GoodsName }}</div>
             <div class="price">￥{{ good.Price }}</div>
@@ -133,7 +145,7 @@ export default {
       goods: [],
       foods: [],
       GoodsTypes: [],
-      emptyGoodImg: 'this.src="' + require('../assets/logo.png') + '"'
+      emptyGoodImg: 'this.src="' + require('../assets/nopic.gif') + '"'
     }
   },
   mounted () {
@@ -141,10 +153,11 @@ export default {
   },
   methods: {
     imgs (id) {
-      return 'http://192.168.1.51:81/imggoods/' + id + '.jpg'
+      return 'http://192.168.1.51:99/imggoods/' + id + '.jpg'
     },
     loadFoods () {
       let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
+      console.log(apiURL)
       Util.ajax.get(apiURL).then(res => {
         this.foods = res.data
         this.getTypes()
