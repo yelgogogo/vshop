@@ -20,10 +20,11 @@
 }
 .topRightBox {
   width: 75vw;
+  background: rgb(102, 96, 98);
   color: antiquewhite;
   justify-content: space-around;
   font-family: "黑体";
-  font-size: 3rem;
+  font-size: 2.2rem;
   line-height: 90px;
 }
 .centerBox {
@@ -45,12 +46,11 @@
   flex-direction: row;
   flex-wrap: wrap;
   background: black;
-  padding: 10px;
 }
 .leftBoxItem {
   height: 60px;
-  background: rgb(131, 128, 129);
-  color: whitesmoke;
+  background: rgb(133, 129, 102);
+  color: rgb(255, 255, 255);
   line-height: 60px;
   font-size: 20px;
   font-family: "楷体";
@@ -58,10 +58,10 @@
   padding-left: 20px;
 }
 .current {
-  background: antiquewhite;
+  background: rgb(196, 190, 144);
 }
 .goodCard {
-  width: 24vw;
+  width: 25vw;
   height: 38vh;
   margin: 2px;
   background: rgb(102, 96, 98);
@@ -71,7 +71,6 @@
   justify-content: space-between;
   padding-left: 20px;
   height: 20%;
-  line-height: 40px;
   color: whitesmoke;
   font-family: "楷体";
 }
@@ -87,8 +86,8 @@
 <template>
   <div class="mainBox">
     <div class="topBox">
-      <div class="topLeftBox">T H E<br />C R I L L</div>
-      <div class="topRightBox"> Salad</div>
+      <div class="topLeftBox">T H E<br />G R I L L</div>
+      <div class="topRightBox"> {{ currentGoodsType }}</div>
     </div>
     <div class="centerBox">
       <div class="leftBox">
@@ -108,7 +107,7 @@
                :onerror="emptyGoodImg"
                alt
                width="100%"
-               height="78%" />
+               height="80%" />
           <div class="footer">
             <div>{{ good.GoodsName }}</div>
             <div class="price">￥{{ good.Price }}</div>
@@ -127,6 +126,7 @@ export default {
     return {
       types: [1, 2, 3, 4, 5],
       currentIndex: 0,
+      currentGoodsType: '',
       goods: [],
       foods: [],
       GoodsTypes: [],
@@ -150,6 +150,7 @@ export default {
     },
     selectType (type, index) {
       this.currentIndex = index
+      this.currentGoodsType = type
       this.goods = this.foods.filter(f => f.GoodsTypeName === type)
     },
     getTypes () {
