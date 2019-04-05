@@ -105,6 +105,7 @@
       <div class="rightBox">
         <div v-for="good in goods"
              :key="good.ID"
+             @click="show(good)"
              class="goodCard">
           <img :src="imgs(good.ID)"
                :onerror="emptyGoodImg"
@@ -118,6 +119,19 @@
         </div>
       </div>
     </div>
+    <modal name="goodModal" height="auto">
+      <div>
+        <img :src="imgs(goodSelect.ID)"
+          :onerror="emptyGoodImg"
+          alt
+          width="300"
+          height="300" />
+      </div>
+      <div>
+        <div>{{goodSelect.GoodsName}}</div>
+        <div class="price">￥{{ goodSelect.Price }}</div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -131,6 +145,7 @@ export default {
       currentIndex: 0,
       currentGoodsType: '',
       goods: [],
+      goodSelect: {},
       foods: [],
       GoodsTypes: [],
       emptyGoodImg: 'this.src="' + require('../assets/logo.png') + '"'
@@ -140,8 +155,12 @@ export default {
     this.loadFoods()
   },
   methods: {
+    show (good) {
+      this.goodSelect = good
+      this.$modal.show('goodModal')
+    },
     imgs (id) {
-      return 'http://192.168.1.51:81/imggoods/' + id + '.jpg'
+      return 'http://nstart.cc:8686/uploads/shop/' + id + '.jpg'
     },
     loadFoods () {
       let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
