@@ -13,10 +13,7 @@
 }
 .topLeftBox {
   width: 23vw;
-  color: rgb(214, 198, 158);
-  font-size: 2.1rem;
-  text-decoration: underline;
-  font-family: "楷体";
+  background: url("../assets/shop.png") no-repeat center;
 }
 .topRightBox {
   flex: 1;
@@ -73,9 +70,9 @@
   height: 80%;
 }
 .goodimg {
-  max-width: 320px;
+  max-width: 100%;
   width: expression(this.width>320? "100%": this.width);
-  max-height: 240px;
+  max-height: 100%;
   height: expression(this.height>240? "100%": this.height);
 }
 .footer {
@@ -100,7 +97,7 @@
 <template>
   <div class="mainBox">
     <div class="topBox">
-      <div class="topLeftBox">T H E<br />G R I L L</div>
+      <div class="topLeftBox"></div>
       <div class="topRightBox"> {{ currentGoodsType }}</div>
     </div>
     <div class="centerBox">
@@ -116,6 +113,7 @@
       <div class="rightBox">
         <div v-for="good in goods"
              :key="good.ID"
+             @click="show(good)"
              class="goodCard">
           <div class="goodimgdiv">
             <img :src="imgs(good.ID)"
@@ -124,12 +122,29 @@
                  alt />
           </div>
           <div class="footer">
-            <div>{{ good.GoodsName }}</div>
+            <div style="display: flex;flex-direction: column;">
+              <div style="height:25px">{{ good.GoodsName }}</div>
+              <div style="height:25px">{{ good.GoodsPY }}</div>
+            </div>
             <div class="price">￥{{ good.Price }}</div>
           </div>
         </div>
       </div>
     </div>
+    <modal name="goodModal"
+           height="auto">
+      <div>
+        <img :src="imgs(goodSelect.ID)"
+             :onerror="emptyGoodImg"
+             alt
+             width="100%"
+             height="100%" />
+      </div>
+      <div>
+        <div>{{goodSelect.GoodsName}}</div>
+        <div class="price">￥{{ goodSelect.Price }}</div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -143,6 +158,7 @@ export default {
       currentIndex: 0,
       currentGoodsType: '',
       goods: [],
+      goodSelect: {},
       foods: [],
       GoodsTypes: [],
       emptyGoodImg: 'this.src="' + require('../assets/nopic.gif') + '"'
@@ -152,12 +168,15 @@ export default {
     this.loadFoods()
   },
   methods: {
+    show (good) {
+      this.goodSelect = good
+      this.$modal.show('goodModal')
+    },
     imgs (id) {
-      return 'http://192.168.1.51:99/imggoods/' + id + '.jpg'
+      return window.g.baseUrl + '/imggoods/' + id + '.jpg'
     },
     loadFoods () {
-      let apiURL = 'webserviceex.asmx/Moon_GetLocalGoods'
-      console.log(apiURL)
+      let apiURL = '/WebServiceEx.asmx/Moon_GetLocalGoods'
       Util.ajax.get(apiURL).then(res => {
         this.foods = res.data
         this.getTypes()

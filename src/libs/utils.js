@@ -4,9 +4,9 @@ let util = {}
 // 8688
 const ajaxUrl =
   process.env.NODE_ENV === 'development'
-    ? 'http://192.168.1.51:99/'
+    ? window.g.baseUrl
     : process.env.NODE_ENV === 'production'
-      ? 'http://192.168.1.51:99/'
+      ? window.g.baseUrl
       : 'https://debug.url.com'
 
 util.ajax = axios.create({
