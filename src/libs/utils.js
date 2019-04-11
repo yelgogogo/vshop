@@ -11,7 +11,7 @@ const ajaxUrl =
 
 util.ajax = axios.create({
   baseURL: ajaxUrl,
-  withCredentials: true,
+  withCredentials: false,
   timeout: 30000
 })
 

@@ -14,6 +14,8 @@
 .topLeftBox {
   width: 23vw;
   background: url("../assets/shop.png") no-repeat center;
+  height: 100%;
+  background-size: 100% 100%;
 }
 .topRightBox {
   flex: 1;
@@ -46,51 +48,54 @@
   background: black;
 }
 .leftBoxItem {
-  height: 60px;
   background: rgb(133, 129, 102);
   color: rgb(255, 255, 255);
-  line-height: 60px;
-  font-size: 20px;
+  line-height: 20px;
+  font-size: 17px;
   font-family: "楷体";
   text-align: left;
-  padding-left: 20px;
+  padding: 15px 0px 15px 20px;
+  margin-bottom: 1px;
 }
 .current {
   background: rgb(196, 190, 144);
 }
 .goodCard {
   width: 25vw;
-  height: 38vh;
+  height: 300px;
   margin: 2px;
   margin-bottom: 6px;
   background: rgb(102, 96, 98);
 }
 .goodimgdiv {
   width: 25vw;
-  height: 80%;
+  height: 240px;
 }
-.goodimg {
-  max-width: 100%;
-  width: expression(this.width>320? "100%": this.width);
-  max-height: 100%;
-  height: expression(this.height>240? "100%": this.height);
+.goodimgsmall {
+  width: 100%;
+  height: 100%;
 }
 .footer {
   display: flex;
   justify-content: space-between;
   padding-left: 20px;
-  height: 20%;
+  height: 60px;
   line-height: 50px;
   color: whitesmoke;
+  font-size: 15px;
   font-family: "楷体";
   background: rgb(102, 96, 98);
+}
+.goodmodal {
+  width: 100vw;
+  height: 75%;
 }
 .price {
   background: green;
   color: whitesmoke;
   font-size: 1.1rem;
   /*#f4f4f4;*/
-  width: 80px;
+  width: 60px;
 }
 </style>
 
@@ -98,16 +103,17 @@
   <div class="mainBox">
     <div class="topBox">
       <div class="topLeftBox"></div>
-      <div class="topRightBox"> {{ currentGoodsType }}</div>
+      <div class="topRightBox"> {{ currentGoodsType.GoodsTypeName }} {{ currentGoodsType.GoodsTypeNameEng }}</div>
     </div>
     <div class="centerBox">
       <div class="leftBox">
         <div v-for="(type, index) in GoodsTypes"
-             :key="type"
+             :key="type.GoodsTypeName"
              class="leftBoxItem"
              :class="{ current: currentIndex === index }"
              @click="selectType(type, index)">
-          {{ type }}
+          <div style="height:20px">{{ type.GoodsTypeName }}</div>
+          <div style="height:20px">{{ type.GoodsTypeNameEng}}</div>
         </div>
       </div>
       <div class="rightBox">
@@ -116,15 +122,15 @@
              @click="show(good)"
              class="goodCard">
           <div class="goodimgdiv">
-            <img :src="imgs(good.ID)"
-                 class="goodimg"
+            <img :src="imgSmall(good.ID)"
+                 class="goodimgsmall"
                  :onerror="emptyGoodImg"
                  alt />
           </div>
           <div class="footer">
             <div style="display: flex;flex-direction: column;">
-              <div style="height:25px">{{ good.GoodsName }}</div>
-              <div style="height:25px">{{ good.GoodsPY }}</div>
+              <div style="height:20px">{{ good.GoodsName }}</div>
+              <div style="height:20px">{{ good.GoodsPY }}</div>
             </div>
             <div class="price">￥{{ good.Price }}</div>
           </div>
@@ -132,17 +138,25 @@
       </div>
     </div>
     <modal name="goodModal"
-           height="auto">
-      <div>
-        <img :src="imgs(goodSelect.ID)"
+           adaptive='true'
+           width="100%"
+           height="100%"
+           pivotX=0
+           pivotY=0>
+      <div class="goodmodal"
+           @click="$modal.hide('goodModal')">
+        <img :src="img(goodSelect.ID)"
              :onerror="emptyGoodImg"
              alt
              width="100%"
              height="100%" />
       </div>
       <div>
-        <div>{{goodSelect.GoodsName}}</div>
-        <div class="price">￥{{ goodSelect.Price }}</div>
+        <div style="width:80%">
+          <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;">{{goodSelect.GoodsName}} ￥{{ goodSelect.Price }}/{{ goodSelect.Unit }}</div>
+        </div>
+        <div style="height:18px"></div>
+        <p style="width:80vw;padding-left:10vw">{{goodSelect.GoodsIntroduction}}</p>
       </div>
     </modal>
   </div>
@@ -172,7 +186,10 @@ export default {
       this.goodSelect = good
       this.$modal.show('goodModal')
     },
-    imgs (id) {
+    imgSmall (id) {
+      return window.g.baseUrl + '/imggoods/small/' + id + '.jpg'
+    },
+    img (id) {
       return window.g.baseUrl + '/imggoods/' + id + '.jpg'
     },
     loadFoods () {
@@ -186,11 +203,15 @@ export default {
     selectType (type, index) {
       this.currentIndex = index
       this.currentGoodsType = type
-      this.goods = this.foods.filter(f => f.GoodsTypeName === type)
+      this.goods = this.foods.filter(f => f.GoodsTypeName === type.GoodsTypeName)
     },
     getTypes () {
-      let arr = this.foods.map(f => f.GoodsTypeName)
-      this.GoodsTypes = Array.from(new Set(arr))
+      let arr = this.foods.map(f => { return { GoodsTypeName: f.GoodsTypeName, GoodsTypeNameEng: f.GoodsTypeNameEng } })
+      this.GoodsTypes = this.quChong(arr)
+    },
+    quChong (arr) {
+      const res = new Map()
+      return arr.filter((a) => !res.has(a.GoodsTypeName) && res.set(a.GoodsTypeName, 1))
     }
   }
 }
