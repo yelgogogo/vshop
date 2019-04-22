@@ -69,11 +69,7 @@
 }
 .goodimgdiv {
   width: 25vw;
-  height: 240px;
-}
-.goodimgsmall {
-  width: 100%;
-  height: 100%;
+  height: 80%;
 }
 .footer {
   display: flex;
@@ -89,6 +85,11 @@
 .goodmodal {
   width: 100vw;
   height: 75%;
+}
+.centerImg {
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 .price {
   background: green;
@@ -121,11 +122,8 @@
              :key="good.ID"
              @click="show(good)"
              class="goodCard">
-          <div class="goodimgdiv">
-            <img :src="imgSmall(good.ID)"
-                 class="goodimgsmall"
-                 :onerror="emptyGoodImg"
-                 alt />
+          <div class="goodimgdiv centerImg"
+               v-bind:style="imgSmall(good.ID)">
           </div>
           <div class="footer">
             <div style="display: flex;flex-direction: column;">
@@ -138,18 +136,14 @@
       </div>
     </div>
     <modal name="goodModal"
-           adaptive='true'
-           width="100%"
-           height="100%"
-           pivotX=0
-           pivotY=0>
-      <div class="goodmodal"
+           :adaptive="true"
+           :width="1200"
+           :height="800"
+           :pivotX="0"
+           :pivotY="0">
+      <div class="goodmodal centerImg"
+           v-bind:style="img(goodSelect.ID)"
            @click="$modal.hide('goodModal')">
-        <img :src="img(goodSelect.ID)"
-             :onerror="emptyGoodImg"
-             alt
-             width="100%"
-             height="100%" />
       </div>
       <div>
         <div style="width:80%">
@@ -187,10 +181,10 @@ export default {
       this.$modal.show('goodModal')
     },
     imgSmall (id) {
-      return window.g.baseUrl + '/imggoods/small/' + id + '.jpg'
+      return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/' + id + '.jpg)' }
     },
     img (id) {
-      return window.g.baseUrl + '/imggoods/' + id + '.jpg'
+      return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/' + id + '.jpg)' }
     },
     loadFoods () {
       let apiURL = '/WebServiceEx.asmx/Moon_GetLocalGoods'
