@@ -82,12 +82,8 @@
   font-family: "楷体";
   background: rgb(102, 96, 98);
 }
-.goodmodal {
-  width: 100vw;
-  height: 75%;
-}
 .centerImg {
-  background-size: auto 100%;
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -137,20 +133,23 @@
     </div>
     <modal name="goodModal"
            :adaptive="true"
-           :width="1200"
-           :height="800"
+           width="100%"
+           height="100%"
            :pivotX="0"
            :pivotY="0">
-      <div class="goodmodal centerImg"
-           v-bind:style="img(goodSelect.ID)"
+      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
            @click="$modal.hide('goodModal')">
-      </div>
-      <div>
-        <div style="width:80%">
-          <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;">{{goodSelect.GoodsName}} ￥{{ goodSelect.Price }}/{{ goodSelect.Unit }}</div>
+        <div class="centerImg"
+             style="flex:3"
+             v-bind:style="img(goodSelect.ID)">
         </div>
-        <div style="height:18px"></div>
-        <p style="width:80vw;padding-left:10vw">{{goodSelect.GoodsIntroduction}}</p>
+        <div style="flex:1">
+          <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;padding:10 0 0 0">
+            <h4> {{goodSelect.GoodsName}}</h4>
+            <b>￥{{ goodSelect.Price }}/{{ goodSelect.Unit }}</b>
+          </div>
+          <p style="padding:0 10px 0 10px;overflow:scroll;height:300px">{{goodSelect.GoodsIntroduction}}</p>
+        </div>
       </div>
     </modal>
   </div>
@@ -181,7 +180,7 @@ export default {
       this.$modal.show('goodModal')
     },
     imgSmall (id) {
-      return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/' + id + '.jpg)' }
+      return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/small/' + id + '.jpg)' }
     },
     img (id) {
       return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/' + id + '.jpg)' }
