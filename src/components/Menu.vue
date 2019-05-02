@@ -62,7 +62,7 @@
 }
 .goodCard {
   width: 25vw;
-  height: 300px;
+  height: 380px;
   margin: 2px;
   margin-bottom: 6px;
   background: rgb(102, 96, 98);
@@ -74,8 +74,10 @@
 .footer {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  flex-direction: row;
   padding-left: 20px;
-  height: 60px;
+  height: 120px;
   line-height: 50px;
   color: whitesmoke;
   font-size: 15px;
@@ -94,10 +96,25 @@
   /*#f4f4f4;*/
   width: 60px;
 }
+.cart {
+  position: fixed;
+  top: 40px;
+  right: 40px;
+  width: 60px;
+  height: 60px;
+  background: #369be9;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 40px;
+  line-height: 60px;
+}
 </style>
 
 <template>
   <div class="mainBox">
+    <div class="cart" @click="goToCart">
+      <i class="icon ion-md-clipboard"></i>
+    </div>
     <div class="topBox">
       <div class="topLeftBox"></div>
       <div class="topRightBox"> {{ currentGoodsType.GoodsTypeName }} {{ currentGoodsType.GoodsTypeNameEng }}</div>
@@ -111,6 +128,7 @@
              @click="selectType(type, index)">
           <div style="height:20px">{{ type.GoodsTypeName }}</div>
           <div style="height:20px">{{ type.GoodsTypeNameEng}}</div>
+
         </div>
       </div>
       <div class="rightBox">
@@ -127,6 +145,16 @@
               <div style="height:20px">{{ good.GoodsPY }}</div>
             </div>
             <div class="price">￥{{ good.Price }}</div>
+            <div>
+              <div class="operation">
+                <i class="icon ion-ios-add-circle-outline"></i>
+              </div>
+              number
+              <div class="operation">
+                  <i class="icon ion-ios-remove-circle-outline"></i>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -158,6 +186,7 @@
 
 <script>
 import Util from '../libs/utils.js'
+import Bus from '../libs/bus.js'
 export default {
   name: 'Menu',
   data () {
@@ -176,9 +205,14 @@ export default {
     this.loadFoods()
   },
   methods: {
+    goToCart () {
+      this.$router.push('Cart')
+    },
     show (good) {
       this.goodSelect = good
       this.$modal.show('goodModal')
+      Bus.$emit('onCartChange', 111)
+
       setTimeout(() => {
         console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
       }, 100)
