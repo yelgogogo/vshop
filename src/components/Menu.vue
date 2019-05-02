@@ -140,6 +140,7 @@
       <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
            @click="$modal.hide('goodModal')">
         <div class="centerImg"
+        ref="goodModal"
              style="flex:3"
              v-bind:style="img(goodSelect.ID)">
         </div>
@@ -178,6 +179,9 @@ export default {
     show (good) {
       this.goodSelect = good
       this.$modal.show('goodModal')
+      setTimeout(() => {
+        console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
+      }, 100)
     },
     imgSmall (id) {
       return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/small/' + id + '.jpg)' }
