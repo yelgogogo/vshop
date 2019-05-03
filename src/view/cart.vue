@@ -15,17 +15,20 @@ export default {
   name: 'Cart',
   data () {
     return {
-
+      cartData: []
     }
   },
   mounted () {
     Bus.$on('onCartChange', (x) => {
-      console.log(x)
+      this.cartData = x
     })
   },
   methods: {
     goToMenu () {
       this.$router.push('/')
+      setTimeout(() => {
+        Bus.$emit('onCartChange', this.cartData)
+      }, 100)
     }
   }
 }

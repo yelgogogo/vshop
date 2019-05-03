@@ -1,113 +1,139 @@
-﻿
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+﻿<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.mainBox {
-  display: flex;
-  flex-direction: column;
-}
-.topBox {
-  display: flex;
-  flex-direction: row;
-  height: 14vh;
-  background-color: rgb(1, 1, 1);
-}
-.topLeftBox {
-  width: 23vw;
-  background: url("../assets/shop.png") no-repeat center;
-  height: 100%;
-  background-size: 100% 100%;
-}
-.topRightBox {
-  flex: 1;
-  background: rgb(41, 39, 42);
-  color: antiquewhite;
-  justify-content: space-around;
-  font-family: "黑体";
-  font-size: 2.2rem;
-  line-height: 90px;
-}
-.centerBox {
-  display: flex;
-}
-.leftBox {
-  width: 23vw;
-  height: 86vh;
-  overflow: scroll;
-  display: flex;
-  flex-direction: column;
-}
-.rightBox {
-  width: 75vw;
-  height: 86vh;
-  flex: 1;
-  overflow: scroll;
-  display: flex;
-  align-content: flex-start;
-  flex-direction: row;
-  flex-wrap: wrap;
-  background: black;
-}
-.leftBoxItem {
-  background: rgb(133, 129, 102);
-  color: rgb(255, 255, 255);
-  line-height: 20px;
-  font-size: 17px;
-  font-family: "楷体";
-  text-align: left;
-  padding: 15px 0px 15px 20px;
-  margin-bottom: 1px;
-}
-.current {
-  background: rgb(196, 190, 144);
-}
-.goodCard {
-  width: 25vw;
-  height: 380px;
-  margin: 2px;
-  margin-bottom: 6px;
-  background: rgb(102, 96, 98);
-}
-.goodimgdiv {
-  width: 25vw;
-  height: 80%;
-}
-.footer {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  flex-direction: row;
-  padding-left: 20px;
-  height: 120px;
-  line-height: 50px;
-  color: whitesmoke;
-  font-size: 15px;
-  font-family: "楷体";
-  background: rgb(102, 96, 98);
-}
-.centerImg {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-}
-.price {
-  background: green;
-  color: whitesmoke;
-  font-size: 1.1rem;
-  /*#f4f4f4;*/
-  width: 60px;
-}
-.cart {
-  position: fixed;
-  top: 40px;
-  right: 40px;
-  width: 60px;
-  height: 60px;
-  background: #369be9;
-  color: #fff;
-  border-radius: 50%;
-  font-size: 40px;
-  line-height: 60px;
-}
+  .mainBox {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topBox {
+    display: flex;
+    flex-direction: row;
+    height: 14vh;
+    background-color: rgb(1, 1, 1);
+  }
+
+  .topLeftBox {
+    width: 23vw;
+    background: url("../assets/shop.png") no-repeat center;
+    height: 100%;
+    background-size: 100% 100%;
+  }
+
+  .topRightBox {
+    flex: 1;
+    background: rgb(41, 39, 42);
+    color: antiquewhite;
+    justify-content: space-around;
+    font-family: "黑体";
+    font-size: 2.2rem;
+    line-height: 90px;
+  }
+
+  .centerBox {
+    display: flex;
+  }
+
+  .leftBox {
+    width: 23vw;
+    height: 86vh;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .rightBox {
+    width: 75vw;
+    height: 86vh;
+    flex: 1;
+    overflow: scroll;
+    display: flex;
+    align-content: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background: black;
+  }
+
+  .leftBoxItem {
+    background: rgb(133, 129, 102);
+    color: rgb(255, 255, 255);
+    line-height: 20px;
+    font-size: 17px;
+    font-family: "楷体";
+    text-align: left;
+    padding: 15px 0px 15px 20px;
+    margin-bottom: 1px;
+  }
+
+  .current {
+    background: rgb(196, 190, 144);
+  }
+
+  .goodCard {
+    width: 25vw;
+    height: 380px;
+    margin: 2px;
+    margin-bottom: 6px;
+    background: rgb(102, 96, 98);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .goodimgdiv {
+    width: 25vw;
+    height: 80%;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    flex-direction: row;
+    padding-left: 20px;
+    flex: 1;
+    line-height: 50px;
+    color: whitesmoke;
+    font-size: 15px;
+    font-family: "楷体";
+    background: rgb(102, 96, 98);
+  }
+
+  .centerImg {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .price {
+    background: green;
+    color: whitesmoke;
+    font-size: 1.1rem;
+    /*#f4f4f4;*/
+    width: 60px;
+  }
+
+  .cart {
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    width: 60px;
+    height: 60px;
+    background: #369be9;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 40px;
+    line-height: 60px;
+  }
+
+  .operationBox {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .operation {
+    font-size: 24px;
+  }
 </style>
 
 <template>
@@ -121,23 +147,16 @@
     </div>
     <div class="centerBox">
       <div class="leftBox">
-        <div v-for="(type, index) in GoodsTypes"
-             :key="type.GoodsTypeName"
-             class="leftBoxItem"
-             :class="{ current: currentIndex === index }"
-             @click="selectType(type, index)">
+        <div v-for="(type, index) in GoodsTypes" :key="type.GoodsTypeName" class="leftBoxItem" :class="{ current: currentIndex === index }"
+          @click="selectType(type, index)">
           <div style="height:20px">{{ type.GoodsTypeName }}</div>
           <div style="height:20px">{{ type.GoodsTypeNameEng}}</div>
 
         </div>
       </div>
       <div class="rightBox">
-        <div v-for="good in goods"
-             :key="good.ID"
-             @click="show(good)"
-             class="goodCard">
-          <div class="goodimgdiv centerImg"
-               v-bind:style="imgSmall(good.ID)">
+        <div v-for="good in goods" :key="good.ID" @click="show(good)" class="goodCard">
+          <div class="goodimgdiv centerImg" v-bind:style="imgSmall(good.ID)">
           </div>
           <div class="footer">
             <div style="display: flex;flex-direction: column;">
@@ -145,13 +164,13 @@
               <div style="height:20px">{{ good.GoodsPY }}</div>
             </div>
             <div class="price">￥{{ good.Price }}</div>
-            <div>
-              <div class="operation">
-                <i class="icon ion-ios-add-circle-outline"></i>
+            <div class="operationBox">
+              <div class="operation" @click.stop="goodOperation(good, -1)" v-if="good.GoodsCount > 0">
+                <i class="icon ion-ios-remove-circle-outline"></i>
               </div>
-              number
-              <div class="operation">
-                  <i class="icon ion-ios-remove-circle-outline"></i>
+              {{ good.GoodsCount }}
+              <div class="operation" @click.stop="goodOperation(good, 1)">
+                <i class="icon ion-ios-add-circle-outline"></i>
               </div>
             </div>
 
@@ -159,18 +178,9 @@
         </div>
       </div>
     </div>
-    <modal name="goodModal"
-           :adaptive="true"
-           width="100%"
-           height="100%"
-           :pivotX="0"
-           :pivotY="0">
-      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
-           @click="$modal.hide('goodModal')">
-        <div class="centerImg"
-        ref="goodModal"
-             style="flex:3"
-             v-bind:style="img(goodSelect.ID)">
+    <modal name="goodModal" :adaptive="true" width="100%" height="100%" :pivotX="0" :pivotY="0">
+      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;" @click="$modal.hide('goodModal')">
+        <div class="centerImg" ref="goodModal" style="flex:3" v-bind:style="img(goodSelect.ID)">
         </div>
         <div style="flex:1">
           <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;padding:10 0 0 0">
@@ -198,21 +208,36 @@ export default {
       goodSelect: {},
       foods: [],
       GoodsTypes: [],
+      cartData: [],
       emptyGoodImg: 'this.src="' + require('../assets/nopic.gif') + '"'
     }
   },
+  computed: {
+    // cartData: function () {
+    //   return this.goods.filter(g => g.GoodsCount > 0)
+    // }
+  },
   mounted () {
     this.loadFoods()
+    Bus.$on('onCartChange', (x) => {
+      this.cartData = x
+      console.log('this.cartData', this.cartData)
+    })
   },
   methods: {
+    goodOperation (good, v) {
+      good.GoodsCount = good.GoodsCount + v
+    },
     goToCart () {
       this.$router.push('Cart')
+      setTimeout(() => {
+        Bus.$emit('onCartChange', this.goods.filter(g => g.GoodsCount > 0))
+      }, 100
+      )
     },
     show (good) {
       this.goodSelect = good
       this.$modal.show('goodModal')
-      Bus.$emit('onCartChange', 111)
-
       setTimeout(() => {
         console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
       }, 100)
@@ -227,6 +252,12 @@ export default {
       let apiURL = '/WebServiceEx.asmx/Moon_GetLocalGoods'
       Util.ajax.get(apiURL).then(res => {
         this.foods = res.data
+        this.foods.forEach(f => {
+          let findFood = this.cartData.find(c => c.ID === f.ID)
+          if (findFood) {
+            f.GoodsCount = findFood.GoodsCount
+          }
+        })
         this.getTypes()
         this.selectType(this.GoodsTypes[0], 0)
       })
