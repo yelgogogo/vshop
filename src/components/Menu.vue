@@ -221,7 +221,7 @@ export default {
     this.loadFoods()
     Bus.$on('onCartChange', (x) => {
       this.cartData = x
-      console.log('this.cartData', this.cartData)
+      console.log('this.cartData', JSON.stringify(this.cartData))
     })
   },
   methods: {
