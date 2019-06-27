@@ -15,7 +15,7 @@
   width: 23vw;
   background: url("../assets/shop.png") no-repeat center;
   height: 100%;
-  background-size: 100% 100%;
+  background-size: contain;
 }
 .topRightBox {
   flex: 1;
@@ -61,15 +61,15 @@
   background: rgb(196, 190, 144);
 }
 .goodCard {
-  width: 25vw;
-  height: 300px;
+  width: 240px;
+  height: 240px;
   margin: 2px;
   margin-bottom: 6px;
   background: rgb(102, 96, 98);
 }
 .goodimgdiv {
-  width: 25vw;
-  height: 80%;
+  width: 240px;
+  height: 180px;
 }
 .footer {
   display: flex;
@@ -140,7 +140,7 @@
       <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
            @click="$modal.hide('goodModal')">
         <div class="centerImg"
-        ref="goodModal"
+             ref="goodModal"
              style="flex:3"
              v-bind:style="img(goodSelect.ID)">
         </div>
@@ -174,14 +174,16 @@ export default {
   },
   mounted () {
     this.loadFoods()
+    /* alert(this.$refs.shopLogo.clientHeight + ':' + this.$refs.shopLogo.clientWidth) */
   },
   methods: {
     show (good) {
       this.goodSelect = good
       this.$modal.show('goodModal')
-      setTimeout(() => {
+      /* setTimeout(() => {
         console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
-      }, 100)
+        alert(this.$refs.goodModal.clientHeight + ':' + this.$refs.goodModal.clientWidth)
+      }, 100) */
     },
     imgSmall (id) {
       return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/small/' + id + '.jpg)' }
