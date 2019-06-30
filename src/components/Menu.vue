@@ -134,6 +134,99 @@
   .operation {
     font-size: 24px;
   }
+.mainBox {
+  display: flex;
+  flex-direction: column;
+}
+.topBox {
+  display: flex;
+  flex-direction: row;
+  height: 14vh;
+  background-color: rgb(1, 1, 1);
+}
+.topLeftBox {
+  width: 23vw;
+  background: url("../assets/shop.png") no-repeat center;
+  height: 100%;
+  background-size: contain;
+}
+.topRightBox {
+  flex: 1;
+  background: rgb(41, 39, 42);
+  color: antiquewhite;
+  justify-content: space-around;
+  font-family: "黑体";
+  font-size: 2.2rem;
+  line-height: 90px;
+}
+.centerBox {
+  display: flex;
+}
+.leftBox {
+  width: 23vw;
+  height: 86vh;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+}
+.rightBox {
+  width: 75vw;
+  height: 86vh;
+  flex: 1;
+  overflow: scroll;
+  display: flex;
+  align-content: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  background: black;
+}
+.leftBoxItem {
+  background: rgb(133, 129, 102);
+  color: rgb(255, 255, 255);
+  line-height: 20px;
+  font-size: 17px;
+  font-family: "楷体";
+  text-align: left;
+  padding: 15px 0px 15px 20px;
+  margin-bottom: 1px;
+}
+.current {
+  background: rgb(196, 190, 144);
+}
+.goodCard {
+  width: 240px;
+  height: 240px;
+  margin: 2px;
+  margin-bottom: 6px;
+  background: rgb(102, 96, 98);
+}
+.goodimgdiv {
+  width: 240px;
+  height: 180px;
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 20px;
+  height: 60px;
+  line-height: 50px;
+  color: whitesmoke;
+  font-size: 15px;
+  font-family: "楷体";
+  background: rgb(102, 96, 98);
+}
+.centerImg {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.price {
+  background: green;
+  color: whitesmoke;
+  font-size: 1.1rem;
+  /*#f4f4f4;*/
+  width: 60px;
+}
 </style>
 
 <template>
@@ -178,9 +271,18 @@
         </div>
       </div>
     </div>
-    <modal name="goodModal" :adaptive="true" width="100%" height="100%" :pivotX="0" :pivotY="0">
-      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;" @click="$modal.hide('goodModal')">
-        <div class="centerImg" ref="goodModal" style="flex:3" v-bind:style="img(goodSelect.ID)">
+    <modal name="goodModal"
+           :adaptive="true"
+           width="100%"
+           height="100%"
+           :pivotX="0"
+           :pivotY="0">
+      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
+           @click="$modal.hide('goodModal')">
+        <div class="centerImg"
+             ref="goodModal"
+             style="flex:3"
+             v-bind:style="img(goodSelect.ID)">
         </div>
         <div style="flex:1">
           <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;padding:10 0 0 0">
@@ -238,9 +340,10 @@ export default {
     show (good) {
       this.goodSelect = good
       this.$modal.show('goodModal')
-      setTimeout(() => {
+      /* setTimeout(() => {
         console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
-      }, 100)
+        alert(this.$refs.goodModal.clientHeight + ':' + this.$refs.goodModal.clientWidth)
+      }, 100) */
     },
     imgSmall (id) {
       return { 'background-image': 'url(' + window.g.baseUrl + '/imggoods/small/' + id + '.jpg)' }
