@@ -6,10 +6,10 @@
     <el-main height="auto">
       <el-table :data="cartData" style="width: 100%">
         <!-- <el-table-column type="index" label="序号" width="50"></el-table-column> -->
-        <el-table-column prop="GoodsName" label="品名" width="180"></el-table-column>
-        <el-table-column type="expand" label="做法要求" width="180">
+        <el-table-column prop="GoodsName" label="品名" width="100"></el-table-column>
+        <el-table-column label="做法要求" width="180">
           <template slot-scope="props">
-            <el-form label-position="left">
+            <!-- <el-form label-position="left">
               <el-form-item label="做法要求">
                 <el-select placeholder="请选择">
                   <el-option
@@ -20,11 +20,21 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-            </el-form>
+            </el-form>-->
+            <el-select v-model="requirements" multiple="" placeholder="请选择">
+              <el-option-group v-for="group in options" :key="group.label" :label="group.label">
+                <el-option
+                  v-for="item in group.options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                ></el-option>
+              </el-option-group>
+            </el-select>
           </template>
         </el-table-column>
-        <el-table-column prop="Price" label="单价(元)" width="180"></el-table-column>
-        <el-table-column label="数量">
+        <el-table-column prop="Price" label="单价(元)" width="100"></el-table-column>
+        <el-table-column label="数量" width="200">
           <template slot-scope="scope">
             <el-input-number
               :value="scope.row.GoodsCount"
@@ -35,12 +45,12 @@
             ></el-input-number>
           </template>
         </el-table-column>
-        <el-table-column label="小计(元)">
+        <el-table-column label="小计(元)" width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.Price * scope.row.GoodsCount }}</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="220">
+        <el-table-column fixed="right" label="操作" width="180">
           <template slot-scope="scope">
             <el-row>
               <el-col :span="12">
@@ -61,7 +71,7 @@
       </el-table>
     </el-main>
     <el-footer>
-      <el-button type="primary" @click='backToMenu'>继续点菜</el-button>
+      <el-button type="primary" @click="backToMenu">继续点菜</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -72,7 +82,44 @@ export default {
   data() {
     return {
       cartData: [],
-      wait: true
+      wait: true,
+      requirements:[],
+      options: [
+        {
+          label: "辣度",
+          options: [
+            {
+              value: "不辣",
+              label: "不辣"
+            },
+            {
+              value: "微辣",
+              label: "微辣"
+            },
+            {
+              value: "中辣",
+              label: "中辣"
+            },
+            {
+              value: "麻辣",
+              label: "麻辣"
+            }
+          ]
+        },
+        {
+          label: "是否加冰",
+          options: [
+            {
+              value: "加冰",
+              label: "加冰"
+            },
+            {
+              value: "不加冰",
+              label: "不加冰"
+            }
+          ]
+        }
+      ]
     };
   },
 
@@ -94,10 +141,11 @@ export default {
       // console.log(value)
     },
 
-    backToMenu(){
+    backToMenu() {
+      this.$router.push({ name: "Menu" });
       setTimeout(() => {
-        Bus.$emit('onCartChange', this.cartData)
-      }, 100)
+        Bus.$emit("onCartChange", this.cartData);
+      }, 100);
     }
   }
 };

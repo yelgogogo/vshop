@@ -1,4 +1,4 @@
-﻿﻿<template>
+﻿<template>
   <div class="mainBox">
     <div class="cart" @click="goToCart">
       <i class="icon ion-md-clipboard"></i>
@@ -38,6 +38,7 @@
             </div>
             <div class="price">￥{{ good.Price }}</div>
             <div class="operationBox">
+              <!-- <el-input-number size='mini' v-model="good.GoodsCount" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number> -->
               <div
                 class="operation"
                 @click.stop="goodOperation(good, -1)"
@@ -45,7 +46,7 @@
               >
                 <i class="icon ion-ios-remove-circle-outline"></i>
               </div>
-              {{ good.GoodsCount }}
+              <span style="margin: 0px 10px">{{ good.GoodsCount }}</span>
               <div class="operation" @click.stop="goodOperation(good, 1)">
                 <i class="icon ion-ios-add-circle-outline"></i>
               </div>
@@ -329,7 +330,7 @@ export default {
 }
 
 .operation {
-  font-size: 24px;
+  font-size: 40px;
 }
 
 .el-badge {
