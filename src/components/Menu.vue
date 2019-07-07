@@ -1,4 +1,4 @@
-﻿<template>
+﻿﻿<template>
   <div class="mainBox">
     <div class="cart" @click="goToCart">
       <i class="icon ion-md-clipboard"></i>
@@ -54,12 +54,19 @@
         </div>
       </div>
     </div>
-    <modal name="goodModal" :adaptive="true" width="100%" height="100%" :pivotX="0" :pivotY="0">
-      <div
-        style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
-        @click="$modal.hide('goodModal')"
-      >
-        <div class="centerImg" ref="goodModal" style="flex:3" v-bind:style="img(goodSelect.ID)"></div>
+    <modal name="goodModal"
+           :adaptive="true"
+           width="100%"
+           height="100%"
+           :pivotX="0"
+           :pivotY="0">
+      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
+           @click="$modal.hide('goodModal')">
+        <div class="centerImg"
+             ref="goodModal"
+             style="flex:3"
+             v-bind:style="img(goodSelect.ID)">
+        </div>
         <div style="flex:1">
           <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;padding:10 0 0 0">
             <h4>{{goodSelect.GoodsName}}</h4>
@@ -124,16 +131,13 @@ export default {
         Bus.$emit("onCartChange", this.foods.filter(g => g.GoodsCount > 0));
       }, 100);
     },
-    show(good) {
-      // this.goodSelect = good;
-      // this.$modal.show("goodModal");
-      // setTimeout(() => {
-      //   console.log(
-      //     "goodModal2",
-      //     this.$refs.goodModal.clientHeight,
-      //     this.$refs.goodModal.clientWidth
-      //   );
-      // }, 100);
+    show (good) {
+      this.goodSelect = good
+      this.$modal.show('goodModal')
+      /* setTimeout(() => {
+        console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
+        alert(this.$refs.goodModal.clientHeight + ':' + this.$refs.goodModal.clientWidth)
+      }, 100) */
     },
     imgSmall(id) {
       return {
