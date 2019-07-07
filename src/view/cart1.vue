@@ -5,9 +5,9 @@
     </el-header>
     <el-main height="auto">
       <el-table :data="cartData" style="width: 100%">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <!-- <el-table-column type="index" label="序号" width="50"></el-table-column> -->
         <el-table-column prop="GoodsName" label="品名" width="180"></el-table-column>
-        <el-table-column type="expand">
+        <el-table-column type="expand" label="做法要求" width="180">
           <template slot-scope="props">
             <el-form label-position="left">
               <el-form-item label="做法要求">
