@@ -1,15 +1,15 @@
 <template>
   <el-container>
     <el-header>
-      <el-button icon="el-icon-bell"></el-button>
+      <el-button icon="el-icon-bell" size="mini"></el-button>
     </el-header>
     <el-main height="auto">
-      <el-table :data="cartData" style="width: 100%">
+      <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
         <!-- <el-table-column type="index" label="序号" width="50"></el-table-column> -->
-        <el-table-column prop="GoodsName" label="品名" width="100"></el-table-column>
-        <el-table-column label="做法要求" width="180">
+        <el-table-column prop="GoodsName" label="品名" width="80"></el-table-column>
+        <el-table-column type="expand" label="做法要求" width="120">
           <template slot-scope="props">
-            <!-- <el-form label-position="left">
+            <el-form label-position="left">
               <el-form-item label="做法要求">
                 <el-select placeholder="请选择">
                   <el-option
@@ -20,8 +20,8 @@
                   ></el-option>
                 </el-select>
               </el-form-item>
-            </el-form>-->
-            <el-select v-model="requirements" multiple="" placeholder="请选择">
+            </el-form>
+            <!-- <el-select v-model="requirements" multiple="" placeholder="请选择">
               <el-option-group v-for="group in options" :key="group.label" :label="group.label">
                 <el-option
                   v-for="item in group.options"
@@ -30,13 +30,14 @@
                   :value="item.value"
                 ></el-option>
               </el-option-group>
-            </el-select>
+            </el-select>-->
           </template>
         </el-table-column>
-        <el-table-column prop="Price" label="单价(元)" width="100"></el-table-column>
-        <el-table-column label="数量" width="200">
+        <el-table-column prop="Price" label="单价(元)" width="80"></el-table-column>
+        <el-table-column label="数量" width="140">
           <template slot-scope="scope">
             <el-input-number
+              size="mini"
               :value="scope.row.GoodsCount"
               @change="handleGoodsCountChange(scope, $event)"
               :min="1"
@@ -45,22 +46,28 @@
             ></el-input-number>
           </template>
         </el-table-column>
-        <el-table-column label="小计(元)" width="100">
+        <!-- <el-table-column label="小计(元)" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.Price * scope.row.GoodsCount }}</span>
           </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="180">
+        </el-table-column> -->
+        <el-table-column fixed="right" label="操作" width="170">
           <template slot-scope="scope">
             <el-row>
               <el-col :span="12">
-                <el-button type="wait?'':'primary'" size="small" round icon="el-icon-bell">等叫</el-button>
+                <el-button
+                  @click="changeIsPack(scope, $event)"
+                  :type="scope.row.IsPack?'primary':''"
+                  size="mini"
+                  round
+                  icon="el-icon-bell"
+                >等叫</el-button>
               </el-col>
               <el-col :span="12">
                 <el-button
                   @click.native.prevent="deleteRow(scope.$index, tableData4)"
                   type="danger"
-                  size="small"
+                  size="mini"
                   round
                   icon="el-icon-delete"
                 ></el-button>
@@ -71,7 +78,7 @@
       </el-table>
     </el-main>
     <el-footer>
-      <el-button type="primary" @click="backToMenu">继续点菜</el-button>
+      <el-button type="primary" size="mini" @click="backToMenu">继续点菜</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -82,8 +89,8 @@ export default {
   data() {
     return {
       cartData: [],
-      wait: true,
-      requirements:[],
+      wait: false,
+      requirements: [],
       options: [
         {
           label: "辣度",
@@ -124,7 +131,6 @@ export default {
   },
 
   mounted() {
-    console.log(this.$router.params);
     Bus.$on("onCartChange", x => {
       this.cartData = x;
       console.log(x);
@@ -146,6 +152,10 @@ export default {
       setTimeout(() => {
         Bus.$emit("onCartChange", this.cartData);
       }, 100);
+    },
+
+    changeIsPack(scope, value) {
+      scope.row.IsPack = !scope.row.IsPack;
     }
   }
 };
@@ -167,13 +177,6 @@ export default {
   line-height: 200px;
 }
 
-/* .el-main {
-  background-color: #e9eef3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-} */
-
 body > .el-container {
   margin-bottom: 40px;
 }
@@ -185,5 +188,9 @@ body > .el-container {
 
 .el-container:nth-child(7) .el-aside {
   line-height: 320px;
+}
+
+.el-input-number--mini {
+  width: 100px;
 }
 </style>
