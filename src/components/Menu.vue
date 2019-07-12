@@ -38,7 +38,7 @@
             </div>
             <div class="price">￥{{ good.Price }}</div>
             <div class="operationBox">
-              <!-- <el-input-number size='mini' v-model="good.GoodsCount" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number> -->
+              <!-- <el-input-number size='mini' v-model="good.GoodsCount" @click.stop="" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number> -->
               <div
                 class="operation"
                 @click.stop="goodOperation(good, -1)"
@@ -55,19 +55,12 @@
         </div>
       </div>
     </div>
-    <modal name="goodModal"
-           :adaptive="true"
-           width="100%"
-           height="100%"
-           :pivotX="0"
-           :pivotY="0">
-      <div style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
-           @click="$modal.hide('goodModal')">
-        <div class="centerImg"
-             ref="goodModal"
-             style="flex:3"
-             v-bind:style="img(goodSelect.ID)">
-        </div>
+    <modal name="goodModal" :adaptive="true" width="100%" height="100%" :pivotX="0" :pivotY="0">
+      <div
+        style="display:flex ;flex-direction:row;height:100%;background-color:#FAF9DE;"
+        @click="$modal.hide('goodModal')"
+      >
+        <div class="centerImg" ref="goodModal" style="flex:3" v-bind:style="img(goodSelect.ID)"></div>
         <div style="flex:1">
           <div style="font-family: '黑体';font-size: 2.1rem;text-align:center;padding:10 0 0 0">
             <h4>{{goodSelect.GoodsName}}</h4>
@@ -83,119 +76,119 @@
 </template>
 
 <script>
-import Util from '../libs/utils.js'
-import Bus from '../libs/bus.js'
+import Util from "../libs/utils.js";
+import Bus from "../libs/bus.js";
 export default {
-  name: 'Menu',
-  data () {
+  name: "Menu",
+  data() {
     return {
       types: [1, 2, 3, 4, 5],
       currentIndex: 0,
-      currentGoodsType: '',
+      currentGoodsType: "",
       goods: [],
       goodSelect: {},
       foods: [],
       GoodsTypes: [],
       cartData: [],
-      emptyGoodImg: 'this.src="' + require('../assets/nopic.gif') + '"'
-    }
+      emptyGoodImg: 'this.src="' + require("../assets/nopic.gif") + '"'
+    };
   },
   computed: {
     // cartData: function () {
     //   return this.goods.filter(g => g.GoodsCount > 0)
     // }
   },
-  mounted () {
-    this.loadFoods()
-    Bus.$on('onCartChange', x => {
-      this.cartData = x
-      console.log(x)
+  mounted() {
+    this.loadFoods();
+    Bus.$on("onCartChange", x => {
+      this.cartData = x;
+      console.log(x);
       // console.log("this.cartData", JSON.stringify(this.cartData));
-    })
+    });
   },
   methods: {
-    goodOperation (goods, v) {
-      goods.GoodsCount = goods.GoodsCount + v
+    goodOperation(goods, v) {
+      goods.GoodsCount = goods.GoodsCount + v;
     },
-    getBadgeNumber (GoodsTypeName) {
+    getBadgeNumber(GoodsTypeName) {
       let goods = this.foods.filter(
         item => item.GoodsTypeName === GoodsTypeName
-      )
-      let total = 0
+      );
+      let total = 0;
       for (let item of goods) {
-        total += item.GoodsCount
+        total += item.GoodsCount;
       }
-      return total
+      return total;
     },
-    goToCart () {
-      this.$router.push({ name: 'Cart' })
+    goToCart() {
+      this.$router.push({ name: "Cart" });
       setTimeout(() => {
-        Bus.$emit('onCartChange', this.foods.filter(g => g.GoodsCount > 0))
-      }, 100)
+        Bus.$emit("onCartChange", this.foods.filter(g => g.GoodsCount > 0));
+      }, 100);
     },
-    show (good) {
-      this.goodSelect = good
-      this.$modal.show('goodModal')
+    show(good) {
+      this.goodSelect = good;
+      this.$modal.show("goodModal");
       /* setTimeout(() => {
         console.log('goodModal2', this.$refs.goodModal.clientHeight, this.$refs.goodModal.clientWidth)
         alert(this.$refs.goodModal.clientHeight + ':' + this.$refs.goodModal.clientWidth)
       }, 100) */
     },
-    imgSmall (id) {
+    imgSmall(id) {
       return {
-        'background-image':
-          'url(' + window.g.baseUrl + '/imggoods/small/' + id + '.jpg)'
-      }
+        "background-image":
+          "url(" + window.g.baseUrl + "/imggoods/small/" + id + ".jpg)"
+      };
     },
-    img (id) {
+    img(id) {
       return {
-        'background-image':
-          'url(' + window.g.baseUrl + '/imggoods/' + id + '.jpg)'
-      }
+        "background-image":
+          "url(" + window.g.baseUrl + "/imggoods/" + id + ".jpg)"
+      };
     },
-    loadFoods () {
-      let apiURL = '/WebServiceEx.asmx/Moon_GetLocalGoods'
+    loadFoods() {
+      let apiURL = "/WebServiceEx.asmx/Moon_GetLocalGoods";
       Util.ajax.get(apiURL).then(res => {
-        this.foods = res.data
-        window.foods = res.data
-        console.log(this.foods)
-        console.log(this.foods.filter(item => item.GoodsCount > 0))
+        this.foods = res.data;
+        window.foods = res.data;
+        console.log(this.foods);
+        console.log(this.foods.filter(item => item.GoodsCount > 0));
         this.foods.forEach(f => {
-          let findFood = this.cartData.find(c => c.ID === f.ID)
+          let findFood = this.cartData.find(c => c.ID === f.ID);
           if (findFood) {
-            f.GoodsCount = findFood.GoodsCount
+            f.GoodsCount = findFood.GoodsCount;
           }
-        })
-        this.getTypes()
-        this.selectType(this.GoodsTypes[0], 0)
-      })
+        });
+        this.getTypes();
+        this.selectType(this.GoodsTypes[0], 0);
+      });
     },
-    selectType (type, index) {
-      this.currentIndex = index
-      this.currentGoodsType = type
+    selectType(type, index) {
+      this.currentIndex = index;
+      this.currentGoodsType = type;
       this.goods = this.foods.filter(
         f => f.GoodsTypeName === type.GoodsTypeName
-      )
-      window.goods = this.goods
+      );
+      window.goods = this.goods;
     },
-    getTypes () {
+    getTypes() {
       let arr = this.foods.map(f => {
         return {
           GoodsTypeName: f.GoodsTypeName,
           GoodsTypeNameEng: f.GoodsTypeNameEng
-        }
-      })
-      this.GoodsTypes = this.quChong(arr)
-      window.GoodsTypes = this.GoodsTypes
+        };
+      });
+      this.GoodsTypes = this.quChong(arr);
+      window.GoodsTypes = this.GoodsTypes;
     },
-    quChong (arr) {
-      const res = new Map()
+    quChong(arr) {
+      const res = new Map();
       return arr.filter(
         a => !res.has(a.GoodsTypeName) && res.set(a.GoodsTypeName, 1)
-      )
+      );
     }
   }
-}
+};
 </script>
 
 <style scoped>
@@ -321,6 +314,7 @@ export default {
   border-radius: 50%;
   font-size: 40px;
   line-height: 60px;
+  text-align: center;
 }
 
 .operationBox {
