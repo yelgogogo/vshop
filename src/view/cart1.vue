@@ -94,7 +94,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
-          <el-button size="mini" type="primary" @click="dialogFormVisible = false">确 定</el-button>
+          <el-button size="mini" type="primary" @click="submitOrder">确 定</el-button>
         </div>
       </el-dialog>
     </el-main>
@@ -106,85 +106,92 @@
 </template>
 
 <script>
-import Bus from "../libs/bus.js";
+import Bus from '../libs/bus.js'
 export default {
-  data() {
+  data () {
     return {
       cartData: [],
       // inputVisible: false,
       // inputValue: "",
-      options: ["不辣", "微辣", "中辣", "麻辣"],
+      options: ['不辣', '微辣', '中辣', '麻辣'],
       dialogVisible: false,
       curentRowIndex: 0,
       dialogFormVisible: false,
       form: {
-        jobNumber: "",
-        password: "",
-        tableNumber: "",
+        jobNumber: '',
+        password: '',
+        tableNumber: ''
       },
-      formLabelWidth: "60px"
-    };
+      formLabelWidth: '60px'
+    }
   },
 
-  mounted() {
-    Bus.$on("onCartChange", x => {
-      this.cartData = x;
+  mounted () {
+    Bus.$on('onCartChange', x => {
+      this.cartData = x
       this.cartData = this.cartData.map(item => {
         return Object.assign({}, item, {
           RemarkOptions: this.options,
           closableRemarks: [],
           inputVisible: false,
-          inputValue: ""
-        });
-      });
-      console.log(x);
-    });
+          inputValue: ''
+        })
+      })
+      console.log(x)
+    })
   },
 
   methods: {
-    placeOrder() {
+    submitOrder () {
+      if (!this.form.jobNumber || !this.form.password || !this.form.tableNumber) {
+        return
+      }
+      this.dialogFormVisible = false
+      console.log(this.cartData)
+    },
+    placeOrder () {
       this.dialogFormVisible = true
     },
 
-    openModal(rowIndex) {
-      this.dialogVisible = true;
-      this.currentRowIndex = rowIndex;
+    openModal (rowIndex) {
+      this.dialogVisible = true
+      this.currentRowIndex = rowIndex
     },
 
-    deleteRow() {
-      this.dialogVisible = false;
-      this.cartData.splice(this.currentRowIndex, 1);
+    deleteRow () {
+      this.dialogVisible = false
+      this.cartData.splice(this.currentRowIndex, 1)
     },
 
-    clearCart() {
-      this.cartData = [];
+    clearCart () {
+      this.cartData = []
     },
 
-    handleGoodsCountChange(scope, value) {
-      scope.row.GoodsCount = value;
+    handleGoodsCountChange (scope, value) {
+      scope.row.GoodsCount = value
     },
 
-    backToMenu() {
-      this.$router.push({ name: "Menu" });
+    backToMenu () {
+      this.$router.push({ name: 'Menu' })
       setTimeout(() => {
-        Bus.$emit("onCartChange", this.cartData);
-      }, 100);
+        Bus.$emit('onCartChange', this.cartData)
+      }, 100)
     },
 
-    changeIsPack(scope, value) {
-      scope.row.IsPack = !scope.row.IsPack;
+    changeIsPack (scope, value) {
+      scope.row.IsPack = !scope.row.IsPack
     },
 
-    handleClose(tag, row) {
-      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1);
+    handleClose (tag, row) {
+      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1)
     },
 
-    handleClick(tag, row) {
+    handleClick (tag, row) {
       // console.log(row)
       if (row.GoodsRemarks.indexOf(tag) === -1) {
-        row.GoodsRemarks.push(tag);
+        row.GoodsRemarks.push(tag)
       } else {
-        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1);
+        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
       }
     },
 
@@ -195,16 +202,16 @@ export default {
     //   });
     // },
 
-    handleInputConfirm(row) {
-      let inputValue = row.inputValue;
+    handleInputConfirm (row) {
+      let inputValue = row.inputValue
       if (inputValue) {
-        row.closableRemarks.push(inputValue);
+        row.closableRemarks.push(inputValue)
       }
       // row.inputVisible = false;
-      row.inputValue = "";
+      row.inputValue = ''
     }
   }
-};
+}
 </script>
 
 <style scoped>
