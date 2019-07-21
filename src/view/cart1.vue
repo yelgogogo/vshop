@@ -142,12 +142,24 @@ export default {
   },
 
   methods: {
+    orderSuccess () {
+      this.$message({
+        message: '下单成功',
+        duration: 5000,
+        type: 'success'
+      })
+      this.form.jobNumber = ''
+      this.form.password = ''
+      this.form.tableNumber = ''
+      this.cartData = []
+    },
     submitOrder () {
       if (!this.form.jobNumber || !this.form.password || !this.form.tableNumber) {
         return
       }
       this.dialogFormVisible = false
       console.log(this.cartData)
+      this.orderSuccess()
     },
     placeOrder () {
       this.dialogFormVisible = true
