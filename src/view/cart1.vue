@@ -99,7 +99,7 @@
       </el-dialog>
     </el-main>
     <el-footer>
-      <el-button type="primary" size="mini" @click="backToMenu">继续点菜</el-button>
+      <el-button type="primary" size="mini" @click="backToMenu">继续点单</el-button>
       <el-button type="success" size="mini" @click="placeOrder">下单</el-button>
     </el-footer>
   </el-container>
