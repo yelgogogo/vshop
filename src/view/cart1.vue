@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <el-button type="danger" icon="el-icon-delete" size="mini" @click='clearCart'>全部删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" size="mini" @click="clearCart">全部删除</el-button>
     </el-header>
     <el-main height="auto">
       <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
@@ -13,7 +13,7 @@
               :key="tag"
               v-for="tag in scope.row.RemarkOptions"
               :disable-transitions="false"
-              :type='scope.row.GoodsRemarks.indexOf(tag) === -1 ? "info" : ""'
+              :type="scope.row.GoodsRemarks.indexOf(tag) === -1 ? 'info' : ''"
               @click="handleClick(tag, scope.row)"
             >{{tag}}</el-tag>
             <el-tag
@@ -25,14 +25,14 @@
             >{{tag}}</el-tag>
             <el-input
               class="input-new-tag"
-              v-if="scope.row.inputVisible"
+              placeholder="+ 备注"
               v-model="scope.row.inputValue"
               ref="saveTagInput"
               size="small"
               @keyup.enter.native="handleInputConfirm(scope.row)"
               @blur="handleInputConfirm(scope.row)"
             ></el-input>
-            <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ 备注</el-button>
+            <!-- <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ 备注</el-button> -->
           </template>
         </el-table-column>
         <el-table-column prop="Price" label="单价(元)" min-width="80"></el-table-column>
@@ -63,7 +63,7 @@
               icon="el-icon-bell"
             >等叫</el-button>
             <el-button
-              @click.native.prevent="deleteRow(scope.$index)"
+              @click.native.prevent="openModal(scope.$index)"
               type="danger"
               size="mini"
               round
@@ -72,10 +72,35 @@
           </template>
         </el-table-column>
       </el-table>
+      <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+        <span>确定删除吗？</span>
+        <span slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+          <el-button size="mini" type="primary" @click="deleteRow">确 定</el-button>
+        </span>
+      </el-dialog>
+
+      <el-dialog title="下单" :visible.sync="dialogFormVisible">
+        <el-form :model="form" :label-width="formLabelWidth" size="mini">
+          <el-form-item label="工号">
+            <el-input v-model="form.jobNumber" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="form.password" auto-complete="off"></el-input>
+          </el-form-item>
+          <el-form-item label="台号">
+            <el-input v-model="form.tableNumber" auto-complete="off"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
+          <el-button size="mini" type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        </div>
+      </el-dialog>
     </el-main>
     <el-footer>
       <el-button type="primary" size="mini" @click="backToMenu">继续点菜</el-button>
-      <el-button type="success" size="mini" @click="backToMenu">下单</el-button>
+      <el-button type="success" size="mini" @click="placeOrder">下单</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -86,9 +111,18 @@ export default {
   data() {
     return {
       cartData: [],
-      inputVisible: false,
-      inputValue: "",
-      options: ["不辣", "微辣", "中辣", "麻辣"]
+      // inputVisible: false,
+      // inputValue: "",
+      options: ["不辣", "微辣", "中辣", "麻辣"],
+      dialogVisible: false,
+      curentRowIndex: 0,
+      dialogFormVisible: false,
+      form: {
+        jobNumber: "",
+        password: "",
+        tableNumber: "",
+      },
+      formLabelWidth: "60px"
     };
   },
 
@@ -100,20 +134,30 @@ export default {
           RemarkOptions: this.options,
           closableRemarks: [],
           inputVisible: false,
-          inputValue:''
-        })
-      })
+          inputValue: ""
+        });
+      });
       console.log(x);
     });
   },
 
   methods: {
-    deleteRow(index) {
-      this.cartData.splice(index, 1);
+    placeOrder() {
+      this.dialogFormVisible = true
     },
 
-    clearCart(){
-      this.cartData = []
+    openModal(rowIndex) {
+      this.dialogVisible = true;
+      this.currentRowIndex = rowIndex;
+    },
+
+    deleteRow() {
+      this.dialogVisible = false;
+      this.cartData.splice(this.currentRowIndex, 1);
+    },
+
+    clearCart() {
+      this.cartData = [];
     },
 
     handleGoodsCountChange(scope, value) {
@@ -135,29 +179,28 @@ export default {
       row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1);
     },
 
-    handleClick(tag, row){
+    handleClick(tag, row) {
       // console.log(row)
-      if(row.GoodsRemarks.indexOf(tag)===-1){
-        row.GoodsRemarks.push(tag)
-      }
-      else{
-        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
+      if (row.GoodsRemarks.indexOf(tag) === -1) {
+        row.GoodsRemarks.push(tag);
+      } else {
+        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1);
       }
     },
 
-    showInput(row) {
-      row.inputVisible = true;
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus();
-      });
-    },
+    // showInput(row) {
+    //   row.inputVisible = true;
+    //   this.$nextTick(_ => {
+    //     this.$refs.saveTagInput.$refs.input.focus();
+    //   });
+    // },
 
     handleInputConfirm(row) {
       let inputValue = row.inputValue;
       if (inputValue) {
         row.closableRemarks.push(inputValue);
       }
-      row.inputVisible = false;
+      // row.inputVisible = false;
       row.inputValue = "";
     }
   }
@@ -173,11 +216,11 @@ export default {
   line-height: 60px;
 }
 
-.el-header{
+.el-header {
   text-align: right;
-  background-color: rgb(173, 117, 41)
+  background-color: rgb(173, 117, 41);
 }
-.el-footer{
+.el-footer {
   background-color: rgb(165, 97, 33);
 }
 
