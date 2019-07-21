@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-header>
-      <el-button type="danger" icon="el-icon-delete" size="mini" @click="clearCart">全部删除</el-button>
+      <el-button type="danger" icon="el-icon-delete" size="mini" @click="openModal(undefined)">全部删除</el-button>
     </el-header>
     <el-main height="auto">
       <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
@@ -48,11 +48,11 @@
             ></el-input-number>
           </template>
         </el-table-column>
-        <!-- <el-table-column label="小计(元)" width="80">
+        <el-table-column label="小计(元)" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.Price * scope.row.GoodsCount }}</span>
           </template>
-        </el-table-column>-->
+        </el-table-column>
         <el-table-column fixed="right" label="操作" min-width="160">
           <template slot-scope="scope">
             <el-button
@@ -68,6 +68,22 @@
               size="mini"
               round
               icon="el-icon-delete"
+            ></el-button>
+            <el-button
+              @click.native.prevent="prepose(scope.$index)"
+              type="primary"
+              size="mini"
+              round
+              :disabled="scope.$index===0"
+              icon="el-icon-arrow-up"
+            ></el-button>
+            <el-button
+              @click.native.prevent="postpose(scope.$index)"
+              type="primary"
+              size="mini"
+              round
+              :disabled="scope.$index===cartData.length-1"
+              icon="el-icon-arrow-down"
             ></el-button>
           </template>
         </el-table-column>
@@ -100,110 +116,142 @@
     </el-main>
     <el-footer>
       <el-button type="primary" size="mini" @click="backToMenu">继续点单</el-button>
-      <el-button type="success" size="mini" @click="placeOrder">下单</el-button>
+      <div style="float:right">
+        <el-tag>￥{{totalPrice}}</el-tag>
+        <el-button type="success" size="mini" @click="placeOrder">下单</el-button>
+      </div>
     </el-footer>
   </el-container>
 </template>
 
 <script>
-import Bus from '../libs/bus.js'
+import Bus from "../libs/bus.js";
 export default {
-  data () {
+  data() {
     return {
       cartData: [],
       // inputVisible: false,
       // inputValue: "",
-      options: ['不辣', '微辣', '中辣', '麻辣'],
+      options: ["不辣", "微辣", "中辣", "麻辣"],
       dialogVisible: false,
       curentRowIndex: 0,
       dialogFormVisible: false,
       form: {
-        jobNumber: '',
-        password: '',
-        tableNumber: ''
+        jobNumber: "",
+        password: "",
+        tableNumber: ""
       },
-      formLabelWidth: '60px'
+      formLabelWidth: "60px"
+    };
+  },
+
+  computed: {
+    totalPrice() {
+      return this.cartData.reduce((prev, current) => {
+        return prev + current.Price * current.GoodsCount;
+      }, 0);
     }
   },
 
-  mounted () {
-    Bus.$on('onCartChange', x => {
-      this.cartData = x
+  mounted() {
+    Bus.$on("onCartChange", x => {
+      this.cartData = x;
       this.cartData = this.cartData.map(item => {
         return Object.assign({}, item, {
           RemarkOptions: this.options,
           closableRemarks: [],
           inputVisible: false,
-          inputValue: ''
-        })
-      })
-      console.log(x)
-    })
+          inputValue: ""
+        });
+      });
+      console.log(x);
+    });
   },
 
   methods: {
-    orderSuccess () {
+    orderSuccess() {
       this.$message({
-        message: '下单成功',
+        message: "下单成功",
         duration: 5000,
-        type: 'success'
-      })
-      this.form.jobNumber = ''
-      this.form.password = ''
-      this.form.tableNumber = ''
-      this.cartData = []
+        type: "success"
+      });
+      this.form.jobNumber = "";
+      this.form.password = "";
+      this.form.tableNumber = "";
+      this.cartData = [];
     },
-    submitOrder () {
-      if (!this.form.jobNumber || !this.form.password || !this.form.tableNumber) {
-        return
+    submitOrder() {
+      if (
+        !this.form.jobNumber ||
+        !this.form.password ||
+        !this.form.tableNumber
+      ) {
+        return;
       }
-      this.dialogFormVisible = false
-      console.log(this.cartData)
-      this.orderSuccess()
+      this.dialogFormVisible = false;
+      console.log(this.cartData);
+      this.orderSuccess();
     },
-    placeOrder () {
-      this.dialogFormVisible = true
-    },
-
-    openModal (rowIndex) {
-      this.dialogVisible = true
-      this.currentRowIndex = rowIndex
+    placeOrder() {
+      this.dialogFormVisible = true;
     },
 
-    deleteRow () {
-      this.dialogVisible = false
-      this.cartData.splice(this.currentRowIndex, 1)
+    openModal(rowIndex) {
+      this.dialogVisible = true;
+      this.currentRowIndex = rowIndex;
+      console.log(rowIndex);
     },
 
-    clearCart () {
-      this.cartData = []
+    deleteRow() {
+      this.dialogVisible = false;
+      if (this.curentRowIndex) {
+        this.cartData.splice(this.currentRowIndex, 1);
+      } else {
+        this.cartData = [];
+      }
     },
 
-    handleGoodsCountChange (scope, value) {
-      scope.row.GoodsCount = value
+    prepose(rowIndex) {
+      let temp = this.cartData[rowIndex - 1];
+      this.cartData[rowIndex - 1] = this.cartData[rowIndex];
+      this.cartData[rowIndex] = temp;
     },
 
-    backToMenu () {
-      this.$router.push({ name: 'Menu' })
+    postpose(rowIndex) {
+      let temp = this.cartData[rowIndex + 1];
+      this.cartData[rowIndex + 1] = this.cartData[rowIndex];
+      this.cartData[rowIndex] = temp;
+    },
+
+    clearCart() {
+      this.cartData = [];
+    },
+
+    handleGoodsCountChange(scope, value) {
+      scope.row.GoodsCount = value;
+    },
+
+    backToMenu() {
+      this.$router.push({ name: "Menu" });
       setTimeout(() => {
-        Bus.$emit('onCartChange', this.cartData)
-      }, 100)
+        Bus.$emit("onCartChange", this.cartData);
+      }, 100);
     },
 
-    changeIsPack (scope, value) {
-      scope.row.IsPack = !scope.row.IsPack
+    changeIsPack(scope, value) {
+      scope.row.IsPack = !scope.row.IsPack;
     },
 
-    handleClose (tag, row) {
-      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1)
+    handleClose(tag, row) {
+      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1);
     },
 
-    handleClick (tag, row) {
+    handleClick(tag, row) {
       // console.log(row)
       if (row.GoodsRemarks.indexOf(tag) === -1) {
-        row.GoodsRemarks.push(tag)
+        row.GoodsRemarks.push(tag);
       } else {
-        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
+        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1);
       }
     },
 
@@ -214,16 +262,16 @@ export default {
     //   });
     // },
 
-    handleInputConfirm (row) {
-      let inputValue = row.inputValue
+    handleInputConfirm(row) {
+      let inputValue = row.inputValue;
       if (inputValue) {
-        row.closableRemarks.push(inputValue)
+        row.closableRemarks.push(inputValue);
       }
       // row.inputVisible = false;
-      row.inputValue = ''
+      row.inputValue = "";
     }
   }
-}
+};
 </script>
 
 <style scoped>
