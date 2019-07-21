@@ -6,7 +6,7 @@
     <el-main height="auto">
       <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
         <!-- <el-table-column type="index" label="序号" width="50"></el-table-column> -->
-        <el-table-column prop="GoodsName" label="品名" min-width="60"></el-table-column>
+        <el-table-column prop="GoodsName" label="品名" min-width="60" sortable></el-table-column>
         <el-table-column type="expand" label="做法要求" width="80">
           <template slot-scope="scope">
             <el-tag
@@ -35,8 +35,8 @@
             <!-- <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ 备注</el-button> -->
           </template>
         </el-table-column>
-        <el-table-column prop="Price" label="单价(元)" min-width="80"></el-table-column>
-        <el-table-column label="数量" min-width="100">
+        <el-table-column prop="Price" label="单价(元)" min-width="80" sortable></el-table-column>
+        <el-table-column label="数量" min-width="90" sortable :sort-method="sortGoodsCount">
           <template slot-scope="scope">
             <el-input-number
               size="mini"
@@ -48,7 +48,7 @@
             ></el-input-number>
           </template>
         </el-table-column>
-        <el-table-column label="小计(元)" width="80">
+        <el-table-column label="小计(元)" width="90" sortable :sort-method="sortSubTotal">
           <template slot-scope="scope">
             <span>{{ scope.row.Price * scope.row.GoodsCount }}</span>
           </template>
@@ -117,7 +117,8 @@
     <el-footer>
       <el-button type="primary" size="mini" @click="backToMenu">继续点单</el-button>
       <div style="float:right">
-        <el-tag>￥{{totalPrice}}</el-tag>
+        <!-- <el-tag>￥{{totalPrice}}</el-tag> -->
+        <span style="color:white; padding-right:10px">总价：￥{{totalPrice}}</span>
         <el-button type="success" size="mini" @click="placeOrder">下单</el-button>
       </div>
     </el-footer>
@@ -223,6 +224,14 @@ export default {
       this.cartData[rowIndex] = temp;
     },
 
+    sortGoodsCount(a, b) {
+      return a.GoodsCount - b.GoodsCount;
+    },
+
+    sortSubTotal(a, b){
+      return a.Price * a.GoodsCount - b.Price * b.GoodsCount;
+    },
+
     clearCart() {
       this.cartData = [];
     },
@@ -255,19 +264,12 @@ export default {
       }
     },
 
-    // showInput(row) {
-    //   row.inputVisible = true;
-    //   this.$nextTick(_ => {
-    //     this.$refs.saveTagInput.$refs.input.focus();
-    //   });
-    // },
-
     handleInputConfirm(row) {
       let inputValue = row.inputValue;
       if (inputValue) {
         row.closableRemarks.push(inputValue);
+        row.GoodsRemarks.push(inputValue);
       }
-      // row.inputVisible = false;
       row.inputValue = "";
     }
   }
