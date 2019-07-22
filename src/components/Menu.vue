@@ -39,7 +39,7 @@
             <div class="price">￥{{ good.Price }}</div>
             <div class="operationBox">
               <div class="operation" @click.stop="">
-                <el-input-number size='mini' v-model="good.GoodsCount" @click.stop="" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+                <el-input-number size='mini' v-model="good.GoodsCount" @click.stop="" :min="0" label="描述文字"></el-input-number>
               </div>
               <!-- <div
                 class="operation"

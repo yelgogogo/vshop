@@ -42,8 +42,7 @@
               size="mini"
               :value="scope.row.GoodsCount"
               @change="handleGoodsCountChange(scope, $event)"
-              :min="1"
-              :max="10"
+              :min="0"
               label="描述文字"
             ></el-input-number>
           </template>
@@ -148,9 +147,10 @@ export default {
 
   computed: {
     totalPrice() {
-      return this.cartData.reduce((prev, current) => {
-        return prev + current.Price * current.GoodsCount;
+      let result =  this.cartData.reduce((prev, current) => {
+        return prev + current.Price * 100 * current.GoodsCount;
       }, 0);
+      return result / 100
     }
   },
 
