@@ -38,8 +38,10 @@
             </div>
             <div class="price">￥{{ good.Price }}</div>
             <div class="operationBox">
-              <!-- <el-input-number size='mini' v-model="good.GoodsCount" @click.stop="" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number> -->
-              <div
+              <div class="operation" @click.stop="">
+                <el-input-number size='mini' v-model="good.GoodsCount" @click.stop="" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
+              </div>
+              <!-- <div
                 class="operation"
                 @click.stop="goodOperation(good, -1)"
                 v-if="good.GoodsCount > 0"
@@ -49,7 +51,7 @@
               <span style="margin: 0px 10px">{{ good.GoodsCount }}</span>
               <div class="operation" @click.stop="goodOperation(good, 1)">
                 <i class="icon ion-ios-add-circle-outline"></i>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -336,5 +338,9 @@ export default {
 .item {
   margin-top: 10px;
   margin-right: 40px;
+}
+
+.el-input-number--mini {
+  width: 100px;
 }
 </style>
