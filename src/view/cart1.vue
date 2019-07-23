@@ -61,29 +61,24 @@
               round
               icon="el-icon-bell"
             >等叫</el-button>
-            <el-button
-              @click.native.prevent="openModal(scope.$index)"
-              type="danger"
-              size="mini"
-              round
-              icon="el-icon-delete"
-            ></el-button>
-            <el-button
-              @click.native.prevent="prepose(scope.$index)"
-              type="primary"
-              size="mini"
-              round
-              :disabled="scope.$index===0"
-              icon="el-icon-arrow-up"
-            ></el-button>
-            <el-button
-              @click.native.prevent="postpose(scope.$index)"
-              type="primary"
-              size="mini"
-              round
-              :disabled="scope.$index===cartData.length-1"
-              icon="el-icon-arrow-down"
-            ></el-button>
+            <span
+              class="del-btn"
+              @click="openModal(scope.$index)"
+              >
+              <i class="el-icon-delete"></i>
+            </span>
+            <span
+              class="up-btn"
+              @click="prepose(scope.$index)"
+              >
+              <i v-if="scope.$index!==0" class="el-icon-sort-up"></i>
+            </span>
+            <span
+              @click="postpose(scope.$index)"
+              class="down-btn"
+              >
+              <i v-if="scope.$index!==cartData.length-1" class="el-icon-sort-down"></i>
+            </span>
           </template>
         </el-table-column>
       </el-table>
@@ -125,73 +120,73 @@
 </template>
 
 <script>
-import Bus from "../libs/bus.js";
+import Bus from '../libs/bus.js'
 export default {
-  data() {
+  data () {
     return {
       cartData: [],
       // inputVisible: false,
       // inputValue: "",
-      options: ["不辣", "微辣", "中辣", "麻辣"],
+      options: ['不辣', '微辣', '中辣', '麻辣'],
       dialogVisible: false,
       curentRowIndex: 0,
       dialogFormVisible: false,
       form: {
-        jobNumber: "",
-        password: "",
-        tableNumber: ""
+        jobNumber: '',
+        password: '',
+        tableNumber: ''
       },
-      formLabelWidth: "60px"
-    };
+      formLabelWidth: '60px'
+    }
   },
 
   computed: {
-    totalPrice() {
-      let result =  this.cartData.reduce((prev, current) => {
-        return prev + current.Price * 100 * current.GoodsCount;
-      }, 0);
+    totalPrice () {
+      let result = this.cartData.reduce((prev, current) => {
+        return prev + current.Price * 100 * current.GoodsCount
+      }, 0)
       return result / 100
     }
   },
 
-  mounted() {
-    Bus.$on("onCartChange", x => {
-      this.cartData = x;
+  mounted () {
+    Bus.$on('onCartChange', x => {
+      this.cartData = x
       this.cartData = this.cartData.map(item => {
         return Object.assign({}, item, {
           RemarkOptions: this.options,
           closableRemarks: [],
           inputVisible: false,
-          inputValue: ""
-        });
-      });
-      console.log(x);
-    });
+          inputValue: ''
+        })
+      })
+      console.log(x)
+    })
   },
 
   methods: {
-    orderSuccess() {
+    orderSuccess () {
       this.$message({
-        message: "下单成功",
+        message: '下单成功',
         duration: 5000,
-        type: "success"
-      });
-      this.form.jobNumber = "";
-      this.form.password = "";
-      this.form.tableNumber = "";
-      this.cartData = [];
+        type: 'success'
+      })
+      this.form.jobNumber = ''
+      this.form.password = ''
+      this.form.tableNumber = ''
+      this.cartData = []
     },
-    submitOrder() {
+    submitOrder () {
       if (
         !this.form.jobNumber ||
         !this.form.password ||
         !this.form.tableNumber
       ) {
-        return;
+        return
       }
-      this.dialogFormVisible = false;
-      console.log(this.cartData);
-      this.orderSuccess();
+      this.dialogFormVisible = false
+      console.log(this.cartData)
+      this.orderSuccess()
     },
     placeOrder () {
       if (this.cartData.length === 0) {
@@ -200,86 +195,109 @@ export default {
       this.dialogFormVisible = true
     },
 
-    openModal(rowIndex) {
-      this.dialogVisible = true;
-      this.currentRowIndex = rowIndex;
-      console.log(rowIndex);
+    openModal (rowIndex) {
+      this.dialogVisible = true
+      this.currentRowIndex = rowIndex
+      console.log(rowIndex)
     },
 
-    deleteRow() {
-      this.dialogVisible = false;
+    deleteRow () {
+      this.dialogVisible = false
       if (this.curentRowIndex) {
-        this.cartData.splice(this.currentRowIndex, 1);
+        this.cartData.splice(this.currentRowIndex, 1)
       } else {
-        this.cartData = [];
+        this.cartData = []
       }
     },
 
-    prepose(rowIndex) {
-      let temp = this.cartData[rowIndex - 1];
-      this.cartData[rowIndex - 1] = this.cartData[rowIndex];
-      this.cartData[rowIndex] = temp;
+    prepose (rowIndex) {
+      console.log('rowIndex', rowIndex, this.cartData)
+      let temp = {...this.cartData[rowIndex - 1]}
+      this.cartData[rowIndex - 1] = {...this.cartData[rowIndex]}
+      this.cartData[rowIndex] = temp
+      console.log('rowIndex', rowIndex, this.cartData)
     },
 
-    postpose(rowIndex) {
-      let temp = this.cartData[rowIndex + 1];
-      this.cartData[rowIndex + 1] = this.cartData[rowIndex];
-      this.cartData[rowIndex] = temp;
+    postpose (rowIndex) {
+      let temp = this.cartData[rowIndex + 1]
+      this.cartData[rowIndex + 1] = this.cartData[rowIndex]
+      this.cartData[rowIndex] = temp
     },
 
-    sortGoodsCount(a, b) {
-      return a.GoodsCount - b.GoodsCount;
+    sortGoodsCount (a, b) {
+      return a.GoodsCount - b.GoodsCount
     },
 
-    sortSubTotal(a, b){
-      return a.Price * a.GoodsCount - b.Price * b.GoodsCount;
+    sortSubTotal (a, b) {
+      return a.Price * a.GoodsCount - b.Price * b.GoodsCount
     },
 
-    clearCart() {
-      this.cartData = [];
+    clearCart () {
+      this.cartData = []
     },
 
-    handleGoodsCountChange(scope, value) {
-      scope.row.GoodsCount = value;
+    handleGoodsCountChange (scope, value) {
+      scope.row.GoodsCount = value
     },
 
-    backToMenu() {
-      this.$router.push({ name: "Menu" });
+    backToMenu () {
+      this.$router.push({ name: 'Menu' })
       setTimeout(() => {
-        Bus.$emit("onCartChange", this.cartData);
-      }, 100);
+        Bus.$emit('onCartChange', this.cartData)
+      }, 100)
     },
 
-    changeIsPack(scope, value) {
-      scope.row.IsPack = !scope.row.IsPack;
+    changeIsPack (scope, value) {
+      scope.row.IsPack = !scope.row.IsPack
     },
 
-    handleClose(tag, row) {
-      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1);
+    handleClose (tag, row) {
+      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1)
     },
 
-    handleClick(tag, row) {
+    handleClick (tag, row) {
       // console.log(row)
       if (row.GoodsRemarks.indexOf(tag) === -1) {
-        row.GoodsRemarks.push(tag);
+        row.GoodsRemarks.push(tag)
       } else {
-        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1);
+        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
       }
     },
 
-    handleInputConfirm(row) {
-      let inputValue = row.inputValue;
+    handleInputConfirm (row) {
+      let inputValue = row.inputValue
       if (inputValue) {
-        row.closableRemarks.push(inputValue);
-        row.GoodsRemarks.push(inputValue);
+        row.closableRemarks.push(inputValue)
+        row.GoodsRemarks.push(inputValue)
       }
-      row.inputValue = "";
+      row.inputValue = ''
     }
   }
-};
+}
 </script>
 
 <style scoped>
+.del-btn {
+  color: #f56c6c;
+  width: 20px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.up-btn {
+  color: #409eff;
+  width: 20px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.down-btn {
+  color: #409eff;
+  width: 20px;
+  display: inline-block;
+  margin-left: 10px;
+  margin-right: 10px;
+}
 .el-header,
 .el-footer {
   background-color: #b3c0d1;
