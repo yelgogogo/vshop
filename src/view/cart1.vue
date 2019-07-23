@@ -162,6 +162,9 @@ export default {
       this.orderSuccess()
     },
     placeOrder () {
+      if (this.cartData.length === 0) {
+        return
+      }
       this.dialogFormVisible = true
     },
 
