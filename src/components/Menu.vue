@@ -151,16 +151,16 @@ export default {
     loadFoods() {
       let apiURL = "/WebServiceEx.asmx/Moon_GetLocalGoods";
       Util.ajax.get(apiURL).then(res => {
-        this.foods = res.data;
-        window.foods = res.data;
-        console.log(this.foods);
-        console.log(this.foods.filter(item => item.GoodsCount > 0));
-        this.foods.forEach(f => {
-          let findFood = this.cartData.find(c => c.ID === f.ID);
+        this.foods = res.data.map(g => {
+          let findFood = this.cartData.find(c => c.ID === g.ID);
           if (findFood) {
-            f.GoodsCount = findFood.GoodsCount;
+            return {...findFood}
           }
+          const GoodsOptions = g.GoodsRemarks
+          const GoodsRemarks = []
+          return {...g, GoodsRemarks, GoodsOptions}
         });
+        console.log('this.foods', this.foods)
         this.getTypes();
         this.selectType(this.GoodsTypes[0], 0);
       });
