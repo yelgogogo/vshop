@@ -9,42 +9,18 @@
         <el-table-column prop="GoodsName" label="品名" min-width="60" sortable></el-table-column>
         <el-table-column type="expand" label="做法要求" width="80">
           <template slot-scope="scope">
-            <el-tag
-              :key="tag"
-              v-for="tag in scope.row.RemarkOptions"
-              :disable-transitions="false"
-              :type="scope.row.GoodsRemarks.indexOf(tag) === -1 ? 'info' : ''"
-              @click="handleClick(tag, scope.row)"
-            >{{tag}}</el-tag>
-            <el-tag
-              :key="tag"
-              v-for="tag in scope.row.closableRemarks"
-              :disable-transitions="false"
-              closable
-              @close="handleClose(tag, scope.row)"
-            >{{tag}}</el-tag>
-            <el-input
-              class="input-new-tag"
-              placeholder="+ 备注"
-              v-model="scope.row.inputValue"
-              ref="saveTagInput"
-              size="small"
-              @keyup.enter.native="handleInputConfirm(scope.row)"
-              @blur="handleInputConfirm(scope.row)"
-            ></el-input>
+            <el-tag :key="tag" v-for="tag in scope.row.GoodsOptions" :disable-transitions="false" :type="scope.row.GoodsRemarks.indexOf(tag) === -1 ? 'info' : ''"
+              @click="handleClick(tag, scope.row)">{{tag}}</el-tag>
+            <el-tag :key="tag" v-for="tag in scope.row.closableRemarks" :disable-transitions="false" closable @close="handleClose(tag, scope.row)">{{tag}}</el-tag>
+            <el-input class="input-new-tag" placeholder="+ 备注" v-model="scope.row.inputValue" ref="saveTagInput" size="small" @keyup.enter.native="handleInputConfirm(scope.row)"
+              @blur="handleInputConfirm(scope.row)"></el-input>
             <!-- <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ 备注</el-button> -->
           </template>
         </el-table-column>
         <el-table-column prop="Price" label="单价(元)" min-width="80" sortable></el-table-column>
         <el-table-column label="数量" min-width="90" sortable :sort-method="sortGoodsCount">
           <template slot-scope="scope">
-            <el-input-number
-              size="mini"
-              :value="scope.row.GoodsCount"
-              @change="handleGoodsCountChange(scope, $event)"
-              :min="0"
-              label="描述文字"
-            ></el-input-number>
+            <el-input-number size="mini" :value="scope.row.GoodsCount" @change="handleGoodsCountChange(scope, $event)" :min="0" label="描述文字"></el-input-number>
           </template>
         </el-table-column>
         <el-table-column label="小计(元)" width="90" sortable :sort-method="sortSubTotal">
@@ -54,29 +30,14 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" min-width="160">
           <template slot-scope="scope">
-            <el-button
-              @click="changeIsPack(scope, $event)"
-              :type="scope.row.IsPack?'primary':''"
-              size="mini"
-              round
-              icon="el-icon-bell"
-            >等叫</el-button>
-            <span
-              class="del-btn"
-              @click="openModal(scope.$index)"
-              >
+            <el-button @click="changeIsPack(scope, $event)" :type="scope.row.IsPack?'primary':''" size="mini" round icon="el-icon-bell">等叫</el-button>
+            <span class="del-btn" @click="openModal(scope.$index)">
               <i class="el-icon-delete"></i>
             </span>
-            <span
-              class="up-btn"
-              @click="prepose(scope.$index)"
-              >
+            <span class="up-btn" @click="prepose(scope.$index)">
               <i v-if="scope.$index!==0" class="el-icon-sort-up"></i>
             </span>
-            <span
-              @click="postpose(scope.$index)"
-              class="down-btn"
-              >
+            <span @click="postpose(scope.$index)" class="down-btn">
               <i v-if="scope.$index!==cartData.length-1" class="el-icon-sort-down"></i>
             </span>
           </template>
@@ -120,237 +81,241 @@
 </template>
 
 <script>
-import Bus from '../libs/bus.js'
-export default {
-  data () {
-    return {
-      cartData: [],
-      // inputVisible: false,
-      // inputValue: "",
-      options: ['不辣', '微辣', '中辣', '麻辣'],
-      dialogVisible: false,
-      curentRowIndex: 0,
-      dialogFormVisible: false,
-      form: {
-        jobNumber: '',
-        password: '',
-        tableNumber: ''
-      },
-      formLabelWidth: '60px'
-    }
-  },
+  import Bus from '../libs/bus.js'
+  export default {
+    data() {
+      return {
+        cartData: [],
+        // inputVisible: false,
+        // inputValue: "",
+        dialogVisible: false,
+        curentRowIndex: 0,
+        dialogFormVisible: false,
+        form: {
+          jobNumber: '',
+          password: '',
+          tableNumber: ''
+        },
+        formLabelWidth: '60px'
+      }
+    },
 
-  computed: {
-    totalPrice () {
-      let result = this.cartData.reduce((prev, current) => {
-        return prev + current.Price * 100 * current.GoodsCount
-      }, 0)
-      return result / 100
-    }
-  },
+    computed: {
+      totalPrice() {
+        let result = this.cartData.reduce((prev, current) => {
+          return prev + current.Price * 100 * current.GoodsCount
+        }, 0)
+        return result / 100
+      }
+    },
 
-  mounted () {
-    Bus.$on('onCartChange', x => {
-      this.cartData = x
-      this.cartData = this.cartData.map(item => {
-        return Object.assign({}, item, {
-          RemarkOptions: this.options,
-          closableRemarks: [],
-          inputVisible: false,
-          inputValue: ''
+    mounted() {
+      Bus.$on('onCartChange', x => {
+        this.cartData = x
+        this.cartData = this.cartData.map(item => {
+          return Object.assign({}, item, {
+            closableRemarks: [],
+            inputVisible: false,
+            inputValue: ''
+          })
         })
+        console.log(x)
       })
-      console.log(x)
-    })
-  },
-
-  methods: {
-    orderSuccess () {
-      this.$message({
-        message: '下单成功',
-        duration: 5000,
-        type: 'success'
-      })
-      this.form.jobNumber = ''
-      this.form.password = ''
-      this.form.tableNumber = ''
-      this.cartData = []
-    },
-    submitOrder () {
-      if (
-        !this.form.jobNumber ||
-        !this.form.password ||
-        !this.form.tableNumber
-      ) {
-        return
-      }
-      this.dialogFormVisible = false
-      console.log(this.cartData)
-      this.orderSuccess()
-    },
-    placeOrder () {
-      if (this.cartData.length === 0) {
-        return
-      }
-      this.dialogFormVisible = true
     },
 
-    openModal (rowIndex) {
-      this.dialogVisible = true
-      this.currentRowIndex = rowIndex
-      console.log(rowIndex)
-    },
-
-    deleteRow () {
-      this.dialogVisible = false
-      if (this.curentRowIndex) {
-        this.cartData.splice(this.currentRowIndex, 1)
-      } else {
+    methods: {
+      orderSuccess() {
+        this.$message({
+          message: '下单成功',
+          duration: 5000,
+          type: 'success'
+        })
+        this.form.jobNumber = ''
+        this.form.password = ''
+        this.form.tableNumber = ''
         this.cartData = []
+      },
+      submitOrder() {
+        if (
+          !this.form.jobNumber ||
+          !this.form.password ||
+          !this.form.tableNumber
+        ) {
+          return
+        }
+        this.dialogFormVisible = false
+        console.log(this.cartData)
+        this.orderSuccess()
+      },
+      placeOrder() {
+        if (this.cartData.length === 0) {
+          return
+        }
+        this.dialogFormVisible = true
+      },
+
+      openModal(rowIndex) {
+        this.dialogVisible = true
+        this.currentRowIndex = rowIndex
+        console.log(rowIndex)
+      },
+
+      deleteRow() {
+        this.dialogVisible = false
+        if (this.curentRowIndex) {
+          this.cartData.splice(this.currentRowIndex, 1)
+        } else {
+          this.cartData = []
+        }
+      },
+
+      prepose(rowIndex) {
+        console.log('rowIndex', rowIndex, this.cartData)
+        let temp = { ...this.cartData[rowIndex - 1] }
+        this.cartData[rowIndex - 1] = { ...this.cartData[rowIndex] }
+        this.cartData[rowIndex] = temp
+        console.log('rowIndex', rowIndex, this.cartData)
+      },
+
+      postpose(rowIndex) {
+        let temp = this.cartData[rowIndex + 1]
+        this.cartData[rowIndex + 1] = this.cartData[rowIndex]
+        this.cartData[rowIndex] = temp
+      },
+
+      sortGoodsCount(a, b) {
+        return a.GoodsCount - b.GoodsCount
+      },
+
+      sortSubTotal(a, b) {
+        return a.Price * a.GoodsCount - b.Price * b.GoodsCount
+      },
+
+      clearCart() {
+        this.cartData = []
+      },
+
+      handleGoodsCountChange(scope, value) {
+        scope.row.GoodsCount = value
+      },
+
+      backToMenu() {
+        this.$router.push({ name: 'Menu' })
+        setTimeout(() => {
+          Bus.$emit('onCartChange', this.cartData)
+        }, 100)
+      },
+
+      changeIsPack(scope, value) {
+        scope.row.IsPack = !scope.row.IsPack
+      },
+
+      handleClose(tag, row) {
+        row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1)
+      },
+
+      handleClick(tag, row) {
+        // console.log(row)
+        if (row.GoodsRemarks.indexOf(tag) === -1) {
+          row.GoodsRemarks.push(tag)
+        } else {
+          row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
+        }
+      },
+
+      handleInputConfirm(row) {
+        let inputValue = row.inputValue
+        if (inputValue) {
+          row.closableRemarks.push(inputValue)
+          row.GoodsRemarks.push(inputValue)
+        }
+        row.inputValue = ''
       }
-    },
-
-    prepose (rowIndex) {
-      console.log('rowIndex', rowIndex, this.cartData)
-      let temp = {...this.cartData[rowIndex - 1]}
-      this.cartData[rowIndex - 1] = {...this.cartData[rowIndex]}
-      this.cartData[rowIndex] = temp
-      console.log('rowIndex', rowIndex, this.cartData)
-    },
-
-    postpose (rowIndex) {
-      let temp = this.cartData[rowIndex + 1]
-      this.cartData[rowIndex + 1] = this.cartData[rowIndex]
-      this.cartData[rowIndex] = temp
-    },
-
-    sortGoodsCount (a, b) {
-      return a.GoodsCount - b.GoodsCount
-    },
-
-    sortSubTotal (a, b) {
-      return a.Price * a.GoodsCount - b.Price * b.GoodsCount
-    },
-
-    clearCart () {
-      this.cartData = []
-    },
-
-    handleGoodsCountChange (scope, value) {
-      scope.row.GoodsCount = value
-    },
-
-    backToMenu () {
-      this.$router.push({ name: 'Menu' })
-      setTimeout(() => {
-        Bus.$emit('onCartChange', this.cartData)
-      }, 100)
-    },
-
-    changeIsPack (scope, value) {
-      scope.row.IsPack = !scope.row.IsPack
-    },
-
-    handleClose (tag, row) {
-      row.closableRemarks.splice(row.closableRemarks.indexOf(tag), 1)
-    },
-
-    handleClick (tag, row) {
-      // console.log(row)
-      if (row.GoodsRemarks.indexOf(tag) === -1) {
-        row.GoodsRemarks.push(tag)
-      } else {
-        row.GoodsRemarks.splice(row.GoodsRemarks.indexOf(tag), 1)
-      }
-    },
-
-    handleInputConfirm (row) {
-      let inputValue = row.inputValue
-      if (inputValue) {
-        row.closableRemarks.push(inputValue)
-        row.GoodsRemarks.push(inputValue)
-      }
-      row.inputValue = ''
     }
   }
-}
 </script>
 
 <style scoped>
-.del-btn {
-  color: #f56c6c;
-  width: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-.up-btn {
-  color: #409eff;
-  width: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-.down-btn {
-  color: #409eff;
-  width: 20px;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-.el-header,
-.el-footer {
-  background-color: #b3c0d1;
-  color: #333;
-  /* text-align: center; */
-  line-height: 60px;
-}
+  .del-btn {
+    color: #f56c6c;
+    width: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-.el-header {
-  text-align: right;
-  background-color: rgb(173, 117, 41);
-}
-.el-footer {
-  background-color: rgb(165, 97, 33);
-}
+  .up-btn {
+    color: #409eff;
+    width: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
+  .down-btn {
+    color: #409eff;
+    width: 20px;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
 
-body > .el-container {
-  margin-bottom: 40px;
-}
+  .el-header,
+  .el-footer {
+    background-color: #b3c0d1;
+    color: #333;
+    /* text-align: center; */
+    line-height: 60px;
+  }
 
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
+  .el-header {
+    text-align: right;
+    background-color: rgb(173, 117, 41);
+  }
 
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
-}
+  .el-footer {
+    background-color: rgb(165, 97, 33);
+  }
 
-.el-input-number--mini {
-  width: 100px;
-}
+  .el-aside {
+    background-color: #d3dce6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
+  }
 
-.el-tag + .el-tag {
-  margin-left: 10px;
-}
-.button-new-tag {
-  margin-left: 10px;
-  height: 32px;
-  line-height: 30px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-.input-new-tag {
-  width: 90px;
-  margin-left: 10px;
-  vertical-align: bottom;
-}
+  body>.el-container {
+    margin-bottom: 40px;
+  }
+
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
+
+  .el-input-number--mini {
+    width: 100px;
+  }
+
+  .el-tag+.el-tag {
+    margin-left: 10px;
+  }
+
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>
