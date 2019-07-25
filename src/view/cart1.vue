@@ -82,6 +82,7 @@
 
 <script>
   import Bus from '../libs/bus.js'
+  import Util from "../libs/utils.js";
   export default {
     data() {
       return {
@@ -143,9 +144,12 @@
         ) {
           return
         }
-        this.dialogFormVisible = false
         console.log(this.cartData)
-        this.orderSuccess()
+        let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
+        Util.ajax.get(apiURL).then(res => {
+          this.dialogFormVisible = false
+          this.orderSuccess()
+        })
       },
       placeOrder() {
         if (this.cartData.length === 0) {
