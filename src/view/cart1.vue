@@ -5,7 +5,7 @@
     </el-header>
     <el-main height="auto">
       <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
-        <!-- <el-table-column type="index" label="序号" width="50"></el-table-column> -->
+        <el-table-column prop="DisplayOrder" type="index" min-width="16" sortable></el-table-column>
         <el-table-column prop="GoodsName" label="品名" min-width="60" sortable></el-table-column>
         <el-table-column type="expand" label="做法要求" width="80">
           <template slot-scope="scope">
