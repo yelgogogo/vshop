@@ -5,7 +5,10 @@
     </el-header>
     <el-main height="auto">
       <el-table size="mini" highlight-current-row :data="cartData" row-key='ID' style="width: 100%">
-        <el-table-column prop="DisplayOrder" min-width="16" sortable></el-table-column>
+        <el-table-column prop="DisplayOrder" label="分类" min-width="24" sortable>
+            <template slot-scope="scope">{{GoodsTypesDict[scope.row.DisplayOrder]}}</template>
+          
+        </el-table-column>
         <el-table-column prop="GoodsName" label="品名" min-width="60" sortable></el-table-column>
         <el-table-column type="expand" label="做法要求" width="80">
           <template slot-scope="scope">
@@ -87,7 +90,7 @@
     data() {
       return {
         cartData: [],
-        // inputVisible: false,
+        GoodsTypesDict: window.GoodsTypesDict,
         // inputValue: "",
         dialogVisible: false,
         curentRowIndex: 0,

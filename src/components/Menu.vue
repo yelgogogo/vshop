@@ -176,12 +176,16 @@ export default {
     getTypes() {
       let arr = this.foods.map(f => {
         return {
+          DisplayOrder: f.DisplayOrder,
           GoodsTypeName: f.GoodsTypeName,
           GoodsTypeNameEng: f.GoodsTypeNameEng
         };
       });
       this.GoodsTypes = this.quChong(arr);
-      window.GoodsTypes = this.GoodsTypes;
+      window.GoodsTypesDict = {}
+      this.GoodsTypes.forEach(element => {
+        window.GoodsTypesDict[element.DisplayOrder] = element.GoodsTypeName
+      });
     },
     quChong(arr) {
       const res = new Map();
