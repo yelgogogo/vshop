@@ -4,7 +4,7 @@
       <el-button type="danger" icon="el-icon-delete" size="mini" @click="openModal(undefined)">全部删除</el-button>
     </el-header>
     <el-main height="auto">
-      <el-table size="mini" highlight-current-row :data="cartData" style="width: 100%">
+      <el-table size="mini" highlight-current-row :data="cartData" row-key='ID' style="width: 100%">
         <el-table-column prop="DisplayOrder" type="index" min-width="16" sortable></el-table-column>
         <el-table-column prop="GoodsName" label="品名" min-width="60" sortable></el-table-column>
         <el-table-column type="expand" label="做法要求" width="80">
@@ -166,7 +166,7 @@
 
       deleteRow() {
         this.dialogVisible = false
-        if (this.curentRowIndex) {
+        if (this.curentRowIndex!==undefined) {
           this.cartData.splice(this.currentRowIndex, 1)
         } else {
           this.cartData = []
@@ -174,17 +174,19 @@
       },
 
       prepose(rowIndex) {
-        console.log('rowIndex', rowIndex, this.cartData)
-        let temp = { ...this.cartData[rowIndex - 1] }
-        this.cartData[rowIndex - 1] = { ...this.cartData[rowIndex] }
-        this.cartData[rowIndex] = temp
-        console.log('rowIndex', rowIndex, this.cartData)
+        let cartData = this.cartData.slice(0)
+        let temp = cartData[rowIndex - 1]
+        cartData[rowIndex - 1] = cartData[rowIndex]
+        cartData[rowIndex] = temp
+        this.cartData = cartData
       },
 
       postpose(rowIndex) {
-        let temp = this.cartData[rowIndex + 1]
-        this.cartData[rowIndex + 1] = this.cartData[rowIndex]
-        this.cartData[rowIndex] = temp
+        let cartData = this.cartData.slice(0)
+        let temp = cartData[rowIndex + 1]
+        cartData[rowIndex + 1] = cartData[rowIndex]
+        cartData[rowIndex] = temp
+        this.cartData = cartData
       },
 
       sortGoodsCount(a, b) {
