@@ -149,7 +149,7 @@
         }
         console.log(this.cartData)
         let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
-        Util.ajax.get(apiURL).then(res => {
+        Util.ajax.post(apiURL, this.cartData).then(res => {
           this.dialogFormVisible = false
           this.orderSuccess()
         })
