@@ -86,6 +86,7 @@
 <script>
   import Bus from '../libs/bus.js'
   import Util from "../libs/utils.js";
+
   export default {
     data() {
       return {
@@ -149,7 +150,13 @@
         }
         console.log(this.cartData)
         let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
-        Util.ajax.post(apiURL, this.cartData).then(res => {
+        Util.ajax.post(apiURL, {submitMobile: this.cartData}
+        , {
+            headers: {
+              'Content-Type':'application/x-www-form-urlencoded'
+            }
+          }
+          ).then(res => {
           this.dialogFormVisible = false
           this.orderSuccess()
         })
