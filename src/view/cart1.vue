@@ -63,7 +63,7 @@
             <el-input v-model="form.password" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="台号">
-            <el-input v-model="form.RoomID" auto-complete="off"></el-input>
+            <el-input v-model="form.roomName" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -99,7 +99,7 @@
         form: {
           userNo: '',
           password: '',
-          RoomID: ''
+          roomName: ''
         },
         formLabelWidth: '60px'
       }
@@ -137,20 +137,19 @@
         })
         this.form.userNo = ''
         this.form.password = ''
-        this.form.RoomID = ''
+        this.form.roomName = ''
         this.cartData = []
       },
       submitOrder() {
         if (
           !this.form.userNo ||
           !this.form.password ||
-          !this.form.RoomID
+          !this.form.roomName
         ) {
           return
         }
         const SubmitGoods = this.cartData
-        const roomName = ''
-        const submitObj = { ...this.form, roomName, SubmitGoods}
+        const submitObj = { ...this.form, SubmitGoods}
         console.log(this.cartData)
         let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
         Util.ajax.post(apiURL, qs.stringify({
