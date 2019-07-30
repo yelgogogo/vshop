@@ -57,13 +57,13 @@
       <el-dialog title="下单" :visible.sync="dialogFormVisible">
         <el-form :model="form" :label-width="formLabelWidth" size="mini">
           <el-form-item label="工号">
-            <el-input v-model="form.jobNumber" auto-complete="off"></el-input>
+            <el-input v-model="form.userNo" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="密码">
             <el-input v-model="form.password" auto-complete="off"></el-input>
           </el-form-item>
           <el-form-item label="台号">
-            <el-input v-model="form.tableNumber" auto-complete="off"></el-input>
+            <el-input v-model="form.RoomID" auto-complete="off"></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -97,9 +97,9 @@
         curentRowIndex: 0,
         dialogFormVisible: false,
         form: {
-          jobNumber: '',
+          userNo: '',
           password: '',
-          tableNumber: ''
+          RoomID: ''
         },
         formLabelWidth: '60px'
       }
@@ -135,23 +135,26 @@
           duration: 5000,
           type: 'success'
         })
-        this.form.jobNumber = ''
+        this.form.userNo = ''
         this.form.password = ''
-        this.form.tableNumber = ''
+        this.form.RoomID = ''
         this.cartData = []
       },
       submitOrder() {
         if (
-          !this.form.jobNumber ||
+          !this.form.userNo ||
           !this.form.password ||
-          !this.form.tableNumber
+          !this.form.RoomID
         ) {
           return
         }
+        const SubmitGoods = this.cartData
+        const roomName = ''
+        const submitObj = { ...this.form, roomName, SubmitGoods}
         console.log(this.cartData)
         let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
         Util.ajax.post(apiURL, qs.stringify({
-              submitMobile: JSON.stringify(this.cartData)
+              submitMobile: JSON.stringify(submitObj)
             })
         // , {
         //     headers: {
@@ -159,8 +162,16 @@
         //     }
         //   }
           ).then(res => {
-          this.dialogFormVisible = false
-          this.orderSuccess()
+            if (!res.data.Success) {
+              this.$message({
+                message: res.data.ErrorMsg,
+                duration: 5000,
+                type: 'error'
+              })
+              return
+            }
+            this.dialogFormVisible = false
+            this.orderSuccess()
         })
       },
       placeOrder() {
