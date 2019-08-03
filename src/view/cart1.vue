@@ -148,9 +148,13 @@
         ) {
           return
         }
-        const SubmitGoods = this.cartData
+        const SubmitGoods = this.cartData.map(c => {
+          let {ID, Price, Unit, GoodsCount, GoodsRemarks} = c
+          return {GoodsID: ID, Price, Unit, GoodsCount, GoodsRemarks}
+        })
+
         const submitObj = { ...this.form, SubmitGoods}
-        console.log(this.cartData)
+        console.log(submitObj)
         let apiURL = "/WebServiceEx.asmx/Moon_Add_Orders";
         Util.ajax.post(apiURL, qs.stringify({
               submitMobile: JSON.stringify(submitObj)
