@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" min-width="160">
           <template slot-scope="scope">
-            <el-button @click="changeIsPack(scope, $event)" :type="scope.row.IsPack?'primary':''" size="mini" round icon="el-icon-bell">等叫</el-button>
+            <el-button @click="isWait(scope, $event)" :type="scope.row.IsPack?'primary':''" size="mini" round icon="el-icon-bell">等叫</el-button>
             <span class="del-btn" @click="openModal(scope.$index)">
               <i class="el-icon-delete"></i>
             </span>
@@ -238,8 +238,8 @@
         }, 100)
       },
 
-      changeIsPack(scope, value) {
-        scope.row.IsPack = !scope.row.IsPack
+      isWait(scope, value) {
+        scope.row.IsWaitCall = !scope.row.IsWaitCall
       },
 
       handleClose(tag, row) {
