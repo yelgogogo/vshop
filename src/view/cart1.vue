@@ -33,7 +33,7 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" min-width="160">
           <template slot-scope="scope">
-            <el-button @click="isWait(scope, $event)" :type="scope.row.IsPack?'primary':''" size="mini" round icon="el-icon-bell">等叫</el-button>
+            <el-button @click="isWait(scope.row, $event)" :type="scope.row.IsWaitCall?'primary':''" size="mini" round icon="el-icon-bell">等叫</el-button>
             <span class="del-btn" @click="openModal(scope.$index)">
               <i class="el-icon-delete"></i>
             </span>
@@ -149,8 +149,8 @@
           return
         }
         const SubmitGoods = this.cartData.map(c => {
-          let {ID, Price, Unit, GoodsCount, GoodsRemarks} = c
-          return {GoodsID: ID, Price, Unit, GoodsCount, GoodsRemarks}
+          let {ID, Price, Unit, GoodsCount, GoodsRemarks, IsWaitCall} = c
+          return {GoodsID: ID, Price, Unit, GoodsCount, IsWaitCall: IsWaitCall? true: false, GoodsRemarks}
         })
 
         const submitObj = { ...this.form, SubmitGoods}
@@ -238,8 +238,8 @@
         }, 100)
       },
 
-      isWait(scope, value) {
-        scope.row.IsWaitCall = !scope.row.IsWaitCall
+      isWait(row, value) {
+        row.IsWaitCall = !row.IsWaitCall
       },
 
       handleClose(tag, row) {
