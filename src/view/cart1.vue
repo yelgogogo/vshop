@@ -68,7 +68,7 @@
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
-          <el-button size="mini" type="primary" @click="submitOrder">确 定</el-button>
+          <el-button size="mini" :loading="submit" type="primary" @click="submitOrder">确 定</el-button>
         </div>
       </el-dialog>
     </el-main>
@@ -92,7 +92,7 @@
       return {
         cartData: [],
         GoodsTypesDict: window.GoodsTypesDict,
-        // inputValue: "",
+        submit: false,
         dialogVisible: false,
         curentRowIndex: 0,
         dialogFormVisible: false,
@@ -148,6 +148,7 @@
         ) {
           return
         }
+        this.submit = true
         const SubmitGoods = this.cartData.map(c => {
           let {ID, Price, Unit, GoodsCount, GoodsRemarks, IsWaitCall} = c
           return {GoodsID: ID, Price, Unit, GoodsCount, IsWaitCall: IsWaitCall? true: false, GoodsRemarks}
@@ -165,6 +166,7 @@
         //     }
         //   }
           ).then(res => {
+            this.submit = false
             if (!res.data.Success) {
               this.$message({
                 message: res.data.ErrorMsg,
